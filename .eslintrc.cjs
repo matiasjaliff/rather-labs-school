@@ -22,14 +22,14 @@ module.exports = {
       jsx: true,
     },
   },
-  plugins: ["react", "@typescript-eslint", "vitest"],
+  plugins: ["react", "@typescript-eslint"],
   rules: {
     semi: ["error", "always"],
     quotes: ["error", "double"],
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
   },
-  ignorePatterns: ["*.js", "*.cjs", "/*.ts"],
+  ignorePatterns: ["*.js", "*.cjs", "*.ts"],
   settings: {
     react: {
       createClass: "createReactClass", // Regex for Component Factory to use,

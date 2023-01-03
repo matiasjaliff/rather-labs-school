@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Root from "./routes/root";
-import Index from "./routes";
+import Index, { loader as coursesLoader } from "./routes";
 import Course from "./routes/course";
 import Student from "./routes/student";
 import Admin from "./routes/admin";
@@ -17,7 +17,12 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <Index /> },
+      {
+        index: true,
+        element: <Index />,
+        loader: coursesLoader,
+        errorElement: <div>Oops! There was an error.</div>,
+      },
       {
         path: "courses/:courseId",
         element: <Course />,

@@ -393,6 +393,18 @@ i {
   width: 100%;
 }
 
+#courses {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#courses > div {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 #course {
   height: 100%;
   display: flex;

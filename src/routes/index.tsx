@@ -8,7 +8,8 @@ import CourseCard from "../components/courseCard";
 export async function loader() {
   const { data: courses, error } = await supabase.from("courses").select();
   if (error) {
-    throw new Error(error.message);
+    console.log(error);
+    throw new Error("Error " + error.code + ": " + error.message + ".");
   }
   return { courses, error };
 }
@@ -23,17 +24,9 @@ export default function Index(): JSX.Element {
     <div id="courses">
       <h1>Available Courses</h1>
       <div>
-        {courses.map((course) => {
-          return (
-            <CourseCard
-              key={course.course_id}
-              grade={course.grade}
-              section={course.section}
-              shift={course.shift}
-              capacity={`${course.capacity}`}
-            />
-          );
-        })}
+        {courses.map((course) => (
+          <CourseCard key={course.course_id} course={course} />
+        ))}
       </div>
     </div>
   );

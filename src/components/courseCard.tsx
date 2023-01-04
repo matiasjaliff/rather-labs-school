@@ -1,21 +1,20 @@
 import { Card } from "antd";
 
-interface CardProps {
-  grade: string;
-  section: string;
-  shift: string;
-  capacity: string;
+interface CourseCardProps {
+  course: {
+    course_id: number;
+    created_at: string;
+    grade: string;
+    section: string;
+    shift: string;
+    capacity: number;
+  };
 }
 
-export default function CourseCard({
-  grade,
-  section,
-  shift,
-  capacity,
-}: CardProps): JSX.Element {
+export default function CourseCard({ course }: CourseCardProps): JSX.Element {
   return (
     <Card
-      title={`${grade}º ${section}`}
+      title={`${course.grade}º ${course.section}`}
       hoverable={true}
       bordered={false}
       headStyle={{ background: "#e3e3e3", fontSize: "x-large" }}
@@ -26,8 +25,8 @@ export default function CourseCard({
       }}
       style={{ width: "340px", marginBottom: "20px", marginRight: "20px" }}
     >
-      <p>Shift: {shift}</p>
-      <p>Capacity: {capacity}</p>
+      <p>Shift: {course.shift}</p>
+      <p>Capacity: {course.capacity}</p>
     </Card>
   );
 }

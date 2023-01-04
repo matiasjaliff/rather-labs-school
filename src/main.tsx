@@ -21,7 +21,7 @@ const router = createBrowserRouter([
         index: true,
         element: <Index />,
         loader: coursesLoader,
-        errorElement: <div>Oops! There was an error.</div>,
+        errorElement: <ErrorPage />,
       },
       {
         path: "courses/:courseId",

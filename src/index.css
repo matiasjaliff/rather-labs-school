@@ -405,6 +405,8 @@ i {
   flex-wrap: wrap;
 }
 
+/* course.tsx */
+
 #course {
   height: 100%;
   display: flex;
@@ -438,4 +440,39 @@ i {
   font-size: xx-large;
   color: #818181;
   margin-left: 1.5rem;
+}
+
+/* student.tsx */
+
+#student {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#student .header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#student .icon {
+  font-size: xx-large;
+  color: #818181;
+  margin-left: 1.5rem;
+}
+
+#student .details-container {
+  margin-top: 2rem;
+  height: 100%;
+  display: flex;
+}
+
+#student .photo-container {
+  width: 260px;
+}
+
+#student .data-container {
+  flex-grow: 1;
 }

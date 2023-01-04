@@ -1,9 +1,8 @@
-import React, { useContext, useState } from "react";
-
+import { createContext, useContext, useState } from "react";
 import type { CourseType, StudentType } from "../config/types";
 
-const SelectionsContext = React.createContext();
-const SelectionsUpdateContext = React.createContext();
+const SelectionsContext = createContext({});
+const SelectionsUpdateContext = createContext({});
 
 export function useSelections() {
   return useContext(SelectionsContext);
@@ -25,7 +24,6 @@ export function SelectionsProvider({ children }: { children: JSX.Element }) {
     setSelectedStudent(student);
   }
 
-  console.log("Provider ok");
   return (
     <>
       <SelectionsContext.Provider value={{ selectedCourse, selectedStudent }}>

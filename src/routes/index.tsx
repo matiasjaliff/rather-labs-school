@@ -16,7 +16,7 @@ export async function loader() {
 export default function Index(): JSX.Element {
   const courses = useLoaderData() as CourseType[];
   const { handleCourseSelection } = useSelectionsUpdate() as {
-    handleCourseSelection: CourseType;
+    handleCourseSelection: (course: CourseType) => void;
   };
   const navigate = useNavigate();
 

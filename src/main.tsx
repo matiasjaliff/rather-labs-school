@@ -5,7 +5,7 @@ import Root from "./routes/root";
 import { SelectionsProvider } from "./selectionsProvider";
 import Index, { loader as coursesLoader } from "./routes";
 import Course, { loader as studentsLoader } from "./routes/course";
-import Student from "./routes/student";
+import Student, { loader as studentLoader } from "./routes/student";
 import Admin from "./routes/admin";
 import ErrorPage from "./error-page";
 import "./index.css";
@@ -30,6 +30,7 @@ const router = createBrowserRouter([
       },
       {
         path: "students/:studentId",
+        loader: studentLoader,
         element: <Student />,
       },
       {

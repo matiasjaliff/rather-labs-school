@@ -1,25 +1,16 @@
+import { Link } from "react-router-dom";
 import { Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-
-interface StudentType {
-  student_id: number;
-  created_at: string;
-  first_name: string;
-  middle_names: string;
-  last_name: string;
-  birth_date: string;
-  gender: string;
-  has_siblings: boolean;
-  siblings_ids: number | null;
-  course_id: number | null;
-}
+import type { StudentType } from "../../config/types";
 
 const columns: ColumnsType<StudentType> = [
   {
     title: "Student ID",
     dataIndex: "student_id",
     key: "student_id",
-    render: (text) => <a>{text}</a>,
+    width: "100px",
+    align: "center",
+    render: (text: number) => <Link to={`/students/${text}`}>{text}</Link>,
   },
   {
     title: "Last Name",
@@ -49,6 +40,8 @@ const columns: ColumnsType<StudentType> = [
   {
     title: "Actions",
     key: "actions",
+    width: "160px",
+    align: "center",
     render: () => (
       <Space size="middle">
         <a>Edit</a>

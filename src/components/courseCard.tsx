@@ -1,13 +1,5 @@
 import { Card } from "antd";
-
-interface CourseType {
-  course_id: number;
-  created_at: string;
-  grade: string;
-  section: string;
-  shift: string;
-  capacity: number;
-}
+import type { CourseType } from "../../config/types";
 
 export default function CourseCard({
   course,

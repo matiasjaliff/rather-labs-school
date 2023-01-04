@@ -1,13 +1,12 @@
 import { useLoaderData } from "react-router-dom";
-
 import {
   EditFilled,
   LeftCircleFilled,
   RightCircleFilled,
 } from "@ant-design/icons";
-
+import type { CourseType, StudentType } from "../../config/types";
+import { useSelections } from "../selectionsProvider";
 import supabase from "../../config/supabaseClient";
-
 import StudentsTable from "../components/studentsTable";
 
 export async function loader({ params }: { params: { courseId: number } }) {
@@ -23,15 +22,15 @@ export async function loader({ params }: { params: { courseId: number } }) {
 }
 
 export default function Course(): JSX.Element {
-  // To properly cast useLoaderData and get types from loader, refer to the following:
-  // www.typescriptlang.org/docs/handbook/2/typeof-types.html
-  // www.typescriptlang.org/docs/handbook/release-notes/typescript-4-5.html#the-awaited-type-and-promise-improvements
-  const students = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const students = useLoaderData() as StudentType[];
+  const { selectedCourse } = useSelections() as {
+    selectedCourse: CourseType;
+  };
 
   return (
     <div id="course">
       <div className="header">
-        <h1>Course 1º A</h1>
+        <h1>Course {`${selectedCourse.grade}º ${selectedCourse.section}`}</h1>
         <div>
           <EditFilled className="icon" />
           <LeftCircleFilled className="icon" />
@@ -39,8 +38,8 @@ export default function Course(): JSX.Element {
         </div>
       </div>
       <ul>
-        <li>Shift: Morning</li>
-        <li>Occupancy: 12/20</li>
+        <li>Shift: {selectedCourse.shift}</li>
+        <li>Capacity: {selectedCourse.capacity}</li>
       </ul>
       <h2>List of students</h2>
       <StudentsTable students={students} />

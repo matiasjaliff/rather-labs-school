@@ -1,8 +1,7 @@
-import React from "react";
-import { Link, useLoaderData } from "react-router-dom";
-
+import { useLoaderData, useNavigate } from "react-router-dom";
+import { useSelectionsUpdate } from "../selectionsProvider";
+import type { CourseType } from "../../config/types";
 import supabase from "../../config/supabaseClient";
-
 import CourseCard from "../components/courseCard";
 
 export async function loader() {
@@ -15,19 +14,25 @@ export async function loader() {
 }
 
 export default function Index(): JSX.Element {
-  // To properly cast useLoaderData and get types from loader, refer to the following:
-  // www.typescriptlang.org/docs/handbook/2/typeof-types.html
-  // www.typescriptlang.org/docs/handbook/release-notes/typescript-4-5.html#the-awaited-type-and-promise-improvements
-  const courses = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const courses = useLoaderData() as CourseType[];
+  const { handleCourseSelection } = useSelectionsUpdate() as {
+    handleCourseSelection: CourseType;
+  };
+  const navigate = useNavigate();
+
+  function handleClick(course: CourseType) {
+    handleCourseSelection(course);
+    navigate(`/courses/${course.course_id}`);
+  }
 
   return (
     <div id="courses">
       <h1>Available Courses</h1>
       <div>
         {courses.map((course) => (
-          <Link to={`/courses/${course.course_id}`} key={course.course_id}>
+          <div key={course.course_id} onClick={() => handleClick(course)}>
             <CourseCard course={course} />
-          </Link>
+          </div>
         ))}
       </div>
     </div>

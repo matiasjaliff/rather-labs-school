@@ -1,29 +1,50 @@
 import { Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
+interface StudentType {
+  student_id: number;
+  created_at: string;
+  first_name: string;
+  middle_names: string;
+  last_name: string;
+  birth_date: string;
+  gender: string;
+  has_siblings: boolean;
+  siblings_ids: number | null;
+  course_id: number | null;
 }
 
-const columns: ColumnsType<DataType> = [
+const columns: ColumnsType<StudentType> = [
   {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
+    title: "Student ID",
+    dataIndex: "student_id",
+    key: "student_id",
     render: (text) => <a>{text}</a>,
   },
   {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
+    title: "Last Name",
+    dataIndex: "last_name",
+    key: "last_name",
   },
   {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
+    title: "First Name",
+    dataIndex: "first_name",
+    key: "first_name",
+  },
+  {
+    title: "Middle Name",
+    dataIndex: "middle_name",
+    key: "middle_name",
+  },
+  {
+    title: "Birth Date",
+    dataIndex: "birth_date",
+    key: "birth_date",
+  },
+  {
+    title: "Gender",
+    dataIndex: "gender",
+    key: "gender",
   },
   {
     title: "Actions",
@@ -37,35 +58,18 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const data: DataType[] = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-  },
-];
-
-export default function StudentsTable(): JSX.Element {
+export default function StudentsTable({
+  students,
+}: {
+  students: StudentType[];
+}): JSX.Element {
   return (
     <Table
       size={"middle"}
       bordered
       pagination={false}
       columns={columns}
-      dataSource={data}
+      dataSource={students}
     />
   );
 }

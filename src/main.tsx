@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Root from "./routes/root";
 import Index, { loader as coursesLoader } from "./routes";
-import Course from "./routes/course";
+import Course, { loader as studentsLoader } from "./routes/course";
 import Student from "./routes/student";
 import Admin from "./routes/admin";
 import ErrorPage from "./error-page";
@@ -26,6 +26,8 @@ const router = createBrowserRouter([
       {
         path: "courses/:courseId",
         element: <Course />,
+        loader: studentsLoader,
+        errorElement: <ErrorPage />,
       },
       {
         path: "students/:studentId",

@@ -45,7 +45,8 @@ export interface Database {
           birth_date: string;
           gender: string;
           has_siblings: boolean;
-          siblings_ids: number;
+          siblings_ids: number | null;
+          course_id: number | null;
         };
         Insert: {
           student_id?: number;
@@ -56,7 +57,8 @@ export interface Database {
           birth_date: string;
           gender?: string;
           has_siblings?: boolean;
-          siblings_ids: number;
+          siblings_ids?: number | null;
+          course_id?: number | null;
         };
         Update: {
           student_id?: number;
@@ -67,7 +69,8 @@ export interface Database {
           birth_date?: string;
           gender?: string;
           has_siblings?: boolean;
-          siblings_ids?: number;
+          siblings_ids?: number | null;
+          course_id?: number | null;
         };
       };
     };

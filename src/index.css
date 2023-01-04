@@ -35,7 +35,7 @@ button {
   border: none;
   border-radius: 8px;
   padding: 0.5rem 0.75rem;
-  box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.2), 0 1px 2px hsla(0, 0%, 0%, 0.2);
+  /* box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.2), 0 1px 2px hsla(0, 0%, 0%, 0.2); */
   background-color: white;
   line-height: 1.5;
   margin: 0;
@@ -45,14 +45,14 @@ button {
   font-weight: 500;
 }
 
-textarea:hover,
+/* textarea:hover,
 input:hover,
 button:hover {
   box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.6), 0 1px 2px hsla(0, 0%, 0%, 0.2);
-}
+} */
 
 button:active {
-  box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.4);
+  /* box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.4); */
   transform: translateY(1px);
 }
 
@@ -474,5 +474,40 @@ i {
 }
 
 #student .data-container {
+  flex-grow: 1;
+}
+
+/* editStudent.tsx */
+
+#edit-student {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#edit-student .header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#edit-student .icon {
+  font-size: xx-large;
+  color: #818181;
+  margin-left: 1.5rem;
+}
+
+#edit-student .details-container {
+  margin-top: 2rem;
+  height: 100%;
+  display: flex;
+}
+
+#edit-student .photo-container {
+  width: 240px;
+}
+
+#edit-student .form-container {
   flex-grow: 1;
 }

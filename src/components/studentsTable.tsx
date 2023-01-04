@@ -40,12 +40,11 @@ const columns: ColumnsType<StudentType> = [
   {
     title: "Actions",
     key: "actions",
-    width: "160px",
+    width: "320px",
     align: "center",
     render: () => (
       <Space size="middle">
-        <a>Edit</a>
-        <a>Delete</a>
+        <a>Edit</a> |<a>Delete</a> |<a>Remove from course</a>
       </Space>
     ),
   },

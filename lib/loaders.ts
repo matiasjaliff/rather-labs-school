@@ -9,7 +9,16 @@ export async function coursesLoader() {
   return courses;
 }
 
-export async function studentsLoader({
+export async function studentsLoader() {
+  const { data: students, error } = await supabase.from("students").select();
+  if (error) {
+    console.log(error);
+    throw new Error("Error " + error.code + ": " + error.message + ".");
+  }
+  return students;
+}
+
+export async function studentsLoaderByCourse({
   params,
 }: {
   params: { courseId: number };

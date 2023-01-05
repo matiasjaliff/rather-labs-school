@@ -1,18 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { SessionProvider } from "./sessionProvider";
+import { SelectionsProvider } from "./selectionsProvider";
 import {
   coursesLoader,
   studentsLoader,
+  studentsLoaderByCourse,
   studentLoaderById,
 } from "../lib/loaders";
 import Root from "./routes/root";
-import { SelectionsProvider } from "./selectionsProvider";
 import Index from "./routes";
 import Course from "./routes/course";
 import EditStudent from "./routes/editStudent";
 import Student from "./routes/student";
-import Admin from "./routes/admin";
+import AdminStudents from "./routes/adminStudents";
 import ErrorPage from "./error-page";
 import "./index.css";
 
@@ -31,7 +33,13 @@ const router = createBrowserRouter([
       {
         path: "courses/:courseId",
         element: <Course />,
+        loader: studentsLoaderByCourse,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/students",
         loader: studentsLoader,
+        element: <AdminStudents />,
         errorElement: <ErrorPage />,
       },
       {
@@ -46,19 +54,16 @@ const router = createBrowserRouter([
         element: <Student />,
         errorElement: <ErrorPage />,
       },
-      {
-        path: "admin",
-        element: <Admin />,
-        errorElement: <ErrorPage />,
-      },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <SelectionsProvider>
-      <RouterProvider router={router} />
-    </SelectionsProvider>
+    <SessionProvider>
+      <SelectionsProvider>
+        <RouterProvider router={router} />
+      </SelectionsProvider>
+    </SessionProvider>
   </React.StrictMode>
 );

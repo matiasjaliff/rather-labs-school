@@ -6,20 +6,7 @@ import {
 } from "@ant-design/icons";
 import type { CourseType, StudentType } from "../../config/types";
 import { useSelections } from "../selectionsProvider";
-import supabase from "../../config/supabaseClient";
 import StudentsTable from "../components/studentsTable";
-
-export async function loader({ params }: { params: { courseId: number } }) {
-  const { data: students, error } = await supabase
-    .from("students")
-    .select()
-    .eq("course_id", params.courseId);
-  if (error) {
-    console.log(error);
-    throw new Error("Error " + error.code + ": " + error.message + ".");
-  }
-  return students;
-}
 
 export default function Course(): JSX.Element {
   const students = useLoaderData() as StudentType[];

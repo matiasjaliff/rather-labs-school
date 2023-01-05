@@ -57,6 +57,7 @@ export default function StudentsTable({
 }): JSX.Element {
   return (
     <Table
+      rowKey={(students) => students.student_id}
       size={"middle"}
       bordered
       pagination={false}

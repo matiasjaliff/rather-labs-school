@@ -1,17 +1,7 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useSelectionsUpdate } from "../selectionsProvider";
 import type { CourseType } from "../../config/types";
-import supabase from "../../config/supabaseClient";
 import CourseCard from "../components/courseCard";
-
-export async function loader() {
-  const { data: courses, error } = await supabase.from("courses").select();
-  if (error) {
-    console.log(error);
-    throw new Error("Error " + error.code + ": " + error.message + ".");
-  }
-  return courses;
-}
 
 export default function Index(): JSX.Element {
   const courses = useLoaderData() as CourseType[];

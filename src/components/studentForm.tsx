@@ -1,11 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLoaderData } from "react-router-dom";
+import type { CourseType } from "../../config/types";
 import { Button, Checkbox, DatePicker, Form, Input, Select } from "antd";
 
 export default function StudentForm(): JSX.Element {
   const [form] = Form.useForm();
   const dateFormat = "YYYY-MM-DD";
 
+  const courses = useLoaderData() as CourseType[];
+
+  const [gradesList, setGradesList] = useState([""]);
+  const [selectedGrade, setSelectedGrade] = useState("");
+  const [sectionsList, setSectionsList] = useState([""]);
   const [hasSiblings, setHasSiblings] = useState(false);
+
+  useEffect(() => {
+    const grades: string[] = [];
+    courses.forEach((course) => {
+      if (!grades.includes(course.grade)) grades.push(course.grade);
+    });
+    setGradesList(grades);
+  }, []);
+
+  useEffect(() => {
+    const sections: string[] = courses
+      .filter((course) => course.grade === selectedGrade)
+      .map((course) => course.section);
+    setSectionsList(sections);
+  }, [selectedGrade]);
+
+  const handleGradeChange = (value: string) => {
+    form.resetFields(["section"]);
+    setSelectedGrade(value);
+  };
 
   const toggleHasSiblings = () => {
     setHasSiblings(!hasSiblings);
@@ -80,22 +107,30 @@ export default function StudentForm(): JSX.Element {
           style={{ flexBasis: "50%", paddingRight: "0px" }}
         >
           <Form.Item label="Grade" name="grade">
-            <Select placeholder="Select grade">
-              <Select.Option value="1">1</Select.Option>
-              <Select.Option value="2">2</Select.Option>
-              <Select.Option value="3">3</Select.Option>
+            <Select placeholder="Select grade" onChange={handleGradeChange}>
+              {gradesList.map((grade) => (
+                <Select.Option key={grade} value={grade}>
+                  {grade}
+                </Select.Option>
+              ))}
             </Select>
           </Form.Item>
 
           <Form.Item label="Section" name="section">
             <Select placeholder="Select section">
-              <Select.Option value="A">A</Select.Option>
-              <Select.Option value="B">B</Select.Option>
-              <Select.Option value="C">C</Select.Option>
+              {sectionsList.map((section) => (
+                <Select.Option key={section} value={section}>
+                  {section}
+                </Select.Option>
+              ))}
             </Select>
           </Form.Item>
 
-          <Form.Item label="Has siblings at school?" name="has_siblings">
+          <Form.Item
+            label="Has siblings at school?"
+            name="has_siblings"
+            valuePropName="checked"
+          >
             <Checkbox onChange={toggleHasSiblings}></Checkbox>
           </Form.Item>
 

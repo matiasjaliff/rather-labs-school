@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import type { CourseType } from "../../config/types";
 import { Button, Checkbox, DatePicker, Form, Input, Select } from "antd";
@@ -51,15 +51,7 @@ export default function StudentForm(): JSX.Element {
     if (section) setCourseId(courseId[0].course_id);
   }, [section]);
 
-  // Handlers
-
-  const onChange = (value: string) => {
-    console.log(`selected ${value}`);
-  };
-
-  const onSearch = (value: string) => {
-    console.log("search:", value);
-  };
+  // Submitter
 
   async function handleSubmit(): Promise<void> {
     const { data, error } = await supabase.from("students").insert([
@@ -198,8 +190,6 @@ export default function StudentForm(): JSX.Element {
               showSearch
               placeholder="Select student"
               optionFilterProp="children"
-              onChange={onChange}
-              onSearch={onSearch}
               filterOption={(input, option) =>
                 (option?.label ?? "")
                   .toLowerCase()
@@ -228,8 +218,6 @@ export default function StudentForm(): JSX.Element {
               showSearch
               placeholder="Select student"
               optionFilterProp="children"
-              onChange={onChange}
-              onSearch={onSearch}
               filterOption={(input, option) =>
                 (option?.label ?? "")
                   .toLowerCase()

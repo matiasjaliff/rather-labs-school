@@ -1,4 +1,5 @@
 import { Link, Outlet } from "react-router-dom";
+import { Button } from "antd";
 
 export default function Root(): JSX.Element {
   return (
@@ -11,7 +12,7 @@ export default function Root(): JSX.Element {
           </Link>
         </div>
         <nav>
-          <button type="button">Login</button>
+          <Button htmlType="button">Login</Button>
         </nav>
       </div>
       <div id="detail">

@@ -23,9 +23,9 @@ const columns: ColumnsType<StudentType> = [
     key: "first_name",
   },
   {
-    title: "Middle Name",
-    dataIndex: "middle_name",
-    key: "middle_name",
+    title: "Middle Names",
+    dataIndex: "middle_names",
+    key: "middle_names",
   },
   {
     title: "Birth Date",

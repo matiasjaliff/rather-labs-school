@@ -98,16 +98,21 @@ form[action$="destroy"] button {
 
 #root {
   display: flex;
+  flex-direction: row;
   height: 100%;
   width: 100%;
 }
 
 #sidebar {
   width: 18rem;
+  height: 100vh;
   background-color: #f7f7f7;
   border-right: solid 1px black;
   display: flex;
   flex-direction: column;
+  position: fixed;
+  top: 0px;
+  left: 0px;
 }
 
 #sidebar > * {
@@ -253,7 +258,7 @@ i {
 #detail {
   flex: 1;
   padding: 2rem 4rem;
-  width: 100%;
+  margin-left: 18rem;
 }
 
 #detail.loading {

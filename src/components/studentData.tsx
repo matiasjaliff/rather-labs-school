@@ -11,8 +11,8 @@ export default function StudentData({
       <Descriptions.Item label="Student ID">
         {student.student_id}
       </Descriptions.Item>
-      <Descriptions.Item label="Grade">{"GRADE"}</Descriptions.Item>
-      <Descriptions.Item label="Section">{"SECTION"}</Descriptions.Item>
+      <Descriptions.Item label="Grade">{student.grade}</Descriptions.Item>
+      <Descriptions.Item label="Section">{student.section}</Descriptions.Item>
       <Descriptions.Item label="Last Name">
         {student.last_name}
       </Descriptions.Item>

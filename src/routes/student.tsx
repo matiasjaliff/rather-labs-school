@@ -1,10 +1,12 @@
 import { useLoaderData } from "react-router-dom";
-import { EditFilled, UserOutlined } from "@ant-design/icons";
-import { Avatar } from "antd";
+import { UserOutlined } from "@ant-design/icons";
+import { Avatar, Button } from "antd";
 import StudentData from "../components/studentData";
 import type { StudentType } from "../../config/types";
+import { useSession } from "../sessionProvider";
 
 export default function Student(): JSX.Element {
+  const { session } = useSession() as { session: string | null };
   const student = useLoaderData() as StudentType;
 
   return (
@@ -12,7 +14,16 @@ export default function Student(): JSX.Element {
       <div className="header">
         <h1>Student Details</h1>
         <div>
-          <EditFilled className="icon" />
+          {session && (
+            <Button
+              type="primary"
+              size="large"
+              htmlType="button"
+              onClick={() => console.log("Edit student")}
+            >
+              Edit student
+            </Button>
+          )}
         </div>
       </div>
       <div className="details-container">

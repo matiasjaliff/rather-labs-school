@@ -1,14 +1,12 @@
 import { useLoaderData } from "react-router-dom";
-import {
-  EditFilled,
-  LeftCircleFilled,
-  RightCircleFilled,
-} from "@ant-design/icons";
+import { Button } from "antd";
 import type { CourseType, StudentType } from "../../config/types";
+import { useSession } from "../sessionProvider";
 import { useSelections } from "../selectionsProvider";
 import StudentsTable from "../components/studentsTable";
 
 export default function Course(): JSX.Element {
+  const { session } = useSession() as { session: string | null };
   const students = useLoaderData() as StudentType[];
   const { selectedCourse } = useSelections() as {
     selectedCourse: CourseType;
@@ -19,9 +17,16 @@ export default function Course(): JSX.Element {
       <div className="header">
         <h1>Course {`${selectedCourse.grade}º ${selectedCourse.section}`}</h1>
         <div>
-          <EditFilled className="icon" />
-          <LeftCircleFilled className="icon" />
-          <RightCircleFilled className="icon" />
+          {session && (
+            <Button
+              type="primary"
+              size="large"
+              htmlType="button"
+              onClick={() => console.log("Edit course")}
+            >
+              Edit course
+            </Button>
+          )}
         </div>
       </div>
       <ul>

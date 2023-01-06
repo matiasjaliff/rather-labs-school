@@ -4,7 +4,10 @@ import type { StudentType } from "../../config/types";
 export default function StudentData({
   student,
 }: {
-  student: StudentType;
+  student: StudentType & {
+    grade: string;
+    section: string;
+  };
 }): JSX.Element {
   return (
     <Descriptions layout="vertical" bordered>

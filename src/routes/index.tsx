@@ -1,5 +1,5 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
-import { useSelectionsUpdate } from "../selectionsProvider";
+import { useSelectionsUpdate } from "../providers/selectionsProvider";
 import type { CourseType } from "../../config/types";
 import CourseCard from "../components/courseCard";
 

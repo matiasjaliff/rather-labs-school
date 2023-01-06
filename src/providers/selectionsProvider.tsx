@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import type { CourseType, StudentType } from "../config/types";
+import type { CourseType, StudentType } from "../../config/types";
 
 const SelectionsContext = createContext({});
 const SelectionsUpdateContext = createContext({});

@@ -1,13 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { SessionProvider } from "./sessionProvider";
-import { SelectionsProvider } from "./selectionsProvider";
+import { SessionProvider } from "./providers/sessionProvider";
+import { SelectionsProvider } from "./providers/selectionsProvider";
 import {
   coursesLoader,
   studentsLoader,
   studentsLoaderByCourse,
   studentLoaderById,
+  coursesAndstudentsNamesLoader,
 } from "../lib/loaders";
 import Root from "./routes/root";
 import Index from "./routes";
@@ -15,7 +16,7 @@ import Course from "./routes/course";
 import EditStudent from "./routes/editStudent";
 import Student from "./routes/student";
 import AdminStudents from "./routes/adminStudents";
-import ErrorPage from "./error-page";
+import ErrorPage from "./routes/error-page";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -44,7 +45,7 @@ const router = createBrowserRouter([
       },
       {
         path: "students/new",
-        loader: coursesLoader,
+        loader: coursesAndstudentsNamesLoader,
         element: <EditStudent />,
         errorElement: <ErrorPage />,
       },

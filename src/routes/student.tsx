@@ -1,13 +1,31 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Button } from "antd";
 import StudentData from "../components/studentData";
 import type { StudentType } from "../../config/types";
-import { useSession } from "../sessionProvider";
+import { useSession } from "../providers/sessionProvider";
+import supabase from "../../config/supabaseClient";
 
 export default function Student(): JSX.Element {
   const { session } = useSession() as { session: string | null };
-  const student = useLoaderData() as StudentType;
+  const student = useLoaderData() as StudentType & {
+    grade: string;
+    section: string;
+  };
+  const navigate = useNavigate();
+
+  async function handleDelete(): Promise<void> {
+    const { data, error } = await supabase
+      .from("students")
+      .delete()
+      .eq("student_id", student.student_id);
+    if (error) {
+      console.log(error);
+      throw new Error("Error " + error.code + ": " + error.message + ".");
+    }
+    console.log(data);
+    navigate(-1);
+  }
 
   return (
     <div id="student">
@@ -15,14 +33,29 @@ export default function Student(): JSX.Element {
         <h1>Student Details</h1>
         <div>
           {session && (
-            <Button
-              type="primary"
-              size="large"
-              htmlType="button"
-              onClick={() => console.log("Edit student")}
-            >
-              Edit student
-            </Button>
+            <>
+              <Button
+                type="primary"
+                size="large"
+                htmlType="button"
+                onClick={() => console.log("Edit student")}
+              >
+                Edit student
+              </Button>
+              <Button
+                type="primary"
+                size="large"
+                htmlType="button"
+                onClick={() => {
+                  void (async () => {
+                    await handleDelete();
+                  })();
+                }}
+                style={{ marginLeft: "20px" }}
+              >
+                Delete student
+              </Button>
+            </>
           )}
         </div>
       </div>

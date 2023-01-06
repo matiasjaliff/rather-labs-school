@@ -1,13 +1,20 @@
 import { useState, useEffect } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import type { CourseType } from "../../config/types";
+import type { CourseType, StudentType } from "../../config/types";
 import { Button, Checkbox, DatePicker, Form, Input, Select } from "antd";
 import supabase from "../../config/supabaseClient";
 
 export default function StudentForm(): JSX.Element {
   const [form] = Form.useForm();
   const dateFormat = "YYYY-MM-DD";
-  const courses = useLoaderData() as CourseType[];
+  const { courses, students } = useLoaderData() as {
+    courses: CourseType[];
+    students: StudentType[];
+  };
+  const studentsNamesList = students.map((student) => ({
+    value: student.student_id,
+    label: `${student.last_name}, ${student.first_name} ${student.middle_names}`,
+  }));
   const navigate = useNavigate();
 
   // Form states
@@ -21,6 +28,9 @@ export default function StudentForm(): JSX.Element {
   const [section, setSection] = useState<string | undefined>(undefined);
   const [course_id, setCourseId] = useState<number | undefined>(undefined);
   const [has_siblings, setHasSiblings] = useState(false);
+  const [siblings_ids, setSiblingsIds] = useState<number[] | undefined>(
+    undefined
+  );
 
   // List states to use in dropdown selectors
 
@@ -54,6 +64,7 @@ export default function StudentForm(): JSX.Element {
   // Submitter
 
   async function handleSubmit(): Promise<void> {
+    console.log("Entrando");
     const { data, error } = await supabase.from("students").insert([
       {
         last_name,
@@ -63,6 +74,7 @@ export default function StudentForm(): JSX.Element {
         gender,
         has_siblings,
         course_id,
+        siblings_ids,
       },
     ]);
     if (error) {
@@ -84,7 +96,11 @@ export default function StudentForm(): JSX.Element {
       autoComplete="off"
       size="large"
       method="post"
-      onFinish={() => handleSubmit}
+      onFinish={() => {
+        void (async () => {
+          await handleSubmit();
+        })();
+      }}
     >
       <div className="full-form" style={{ display: "flex" }}>
         <div
@@ -132,10 +148,7 @@ export default function StudentForm(): JSX.Element {
             name="gender"
             rules={[{ required: true, message: "Please select gender" }]}
           >
-            <Select
-              placeholder="Select gender"
-              onChange={(value: string) => setGender(value)}
-            >
+            <Select placeholder="Select gender" onChange={setGender}>
               <Select.Option value="Female">Female</Select.Option>
               <Select.Option value="Male">Male</Select.Option>
               <Select.Option value="Other">Other</Select.Option>
@@ -164,10 +177,7 @@ export default function StudentForm(): JSX.Element {
           </Form.Item>
 
           <Form.Item label="Section" name="section">
-            <Select
-              placeholder="Select section"
-              onChange={(value: string) => setSection(value)}
-            >
+            <Select placeholder="Select section" onChange={setSection}>
               {sectionsList.map((section) => (
                 <Select.Option key={section} value={section}>
                   {section}
@@ -184,59 +194,22 @@ export default function StudentForm(): JSX.Element {
             <Checkbox onChange={() => setHasSiblings(!has_siblings)}></Checkbox>
           </Form.Item>
 
-          <Form.Item label="Sibling" name="sibling-1">
+          <Form.Item label="Siblings" name="siblings">
             <Select
               disabled={!has_siblings}
-              showSearch
-              placeholder="Select student"
+              mode="multiple"
+              allowClear
+              placeholder="Select students"
               optionFilterProp="children"
               filterOption={(input, option) =>
                 (option?.label ?? "")
                   .toLowerCase()
                   .includes(input.toLowerCase())
               }
-              options={[
-                {
-                  value: "jack",
-                  label: "Jack",
-                },
-                {
-                  value: "lucy",
-                  label: "Lucy",
-                },
-                {
-                  value: "tom",
-                  label: "Tom",
-                },
-              ]}
-            />
-          </Form.Item>
-
-          <Form.Item label="Sibling" name="sibling-2">
-            <Select
-              disabled={!has_siblings}
-              showSearch
-              placeholder="Select student"
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                (option?.label ?? "")
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
+              options={studentsNamesList}
+              onChange={(value: string[]) =>
+                setSiblingsIds(value.map((id) => parseInt(id)))
               }
-              options={[
-                {
-                  value: "jack",
-                  label: "Jack",
-                },
-                {
-                  value: "lucy",
-                  label: "Lucy",
-                },
-                {
-                  value: "tom",
-                  label: "Tom",
-                },
-              ]}
             />
           </Form.Item>
         </div>

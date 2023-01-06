@@ -1,8 +1,8 @@
 import { useLoaderData } from "react-router-dom";
 import { Button } from "antd";
 import type { CourseType, StudentType } from "../../config/types";
-import { useSession } from "../sessionProvider";
-import { useSelections } from "../selectionsProvider";
+import { useSession } from "../providers/sessionProvider";
+import { useSelections } from "../providers/selectionsProvider";
 import StudentsTable from "../components/studentsTable";
 
 export default function Course(): JSX.Element {

@@ -63,7 +63,7 @@ Outside `src` there are two important folders:
 
 ## **Local dev build**
 
-In case you wanted to try this project locally, please clone this repository and create a `.env` file in the root sirectory with these two keys:
+In case you wanted to try this project locally, please clone this repository and create a `.env` file in the root directory with these two keys:
 
 `VITE_SUPABASE_URL=https://kkotckxbfxzxbwpfwvis.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtrb3Rja3hiZnh6eGJ3cGZ3dmlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzI2NjE2NTQsImV4cCI6MTk4ODIzNzY1NH0.rJ7-CfCk6P4U9hPfwcDqzd35cUSnM3HWE-9j9ebLN9A`

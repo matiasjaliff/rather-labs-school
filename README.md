@@ -48,6 +48,8 @@ Outside `src` there are two important folders:
 - `config` : here is the Supabase client file and types definition for the used schema.
 - `lib` : here is the loaders file, where are all the data loaders needed in the app. These loaders are used before loading the route components that need to fetch information in advance. It's a React Router feature that prevents using data fetching inside useEffect hooks.
 
+---
+
 ## **To Dos**
 
 - Visualize siblings in the student information view.
@@ -56,3 +58,16 @@ Outside `src` there are two important folders:
 - Authenticated sessions.
 - Cleaner CSS.
 - Solve some loaders type inconsistency.
+
+---
+
+## **Local dev build**
+
+In case you wanted to try this project locally, please clone this repository and create a `.env` file in the root sirectory with these two keys:
+
+`VITE_SUPABASE_URL=https://kkotckxbfxzxbwpfwvis.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtrb3Rja3hiZnh6eGJ3cGZ3dmlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzI2NjE2NTQsImV4cCI6MTk4ODIzNzY1NH0.rJ7-CfCk6P4U9hPfwcDqzd35cUSnM3HWE-9j9ebLN9A`
+
+Install dependecies with `npm install`.
+
+Run development build with `npm run dev` and open localhost.

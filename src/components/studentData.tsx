@@ -1,21 +1,20 @@
 import { Descriptions } from "antd";
-import type { StudentType } from "../../config/types";
+import type { StudentType, CourseType } from "../../config/types";
 
 export default function StudentData({
   student,
+  course,
 }: {
-  student: StudentType & {
-    grade: string;
-    section: string;
-  };
+  student: StudentType;
+  course: CourseType | undefined;
 }): JSX.Element {
   return (
     <Descriptions layout="vertical" bordered>
       <Descriptions.Item label="Student ID">
         {student.student_id}
       </Descriptions.Item>
-      <Descriptions.Item label="Grade">{student.grade}</Descriptions.Item>
-      <Descriptions.Item label="Section">{student.section}</Descriptions.Item>
+      <Descriptions.Item label="Grade">{course?.grade}</Descriptions.Item>
+      <Descriptions.Item label="Section">{course?.section}</Descriptions.Item>
       <Descriptions.Item label="Last Name">
         {student.last_name}
       </Descriptions.Item>

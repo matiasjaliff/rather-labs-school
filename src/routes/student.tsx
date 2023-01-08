@@ -2,15 +2,15 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Button } from "antd";
 import StudentData from "../components/studentData";
-import type { StudentType } from "../../config/types";
+import type { CourseType, StudentType } from "../../config/types";
 import { useSession } from "../providers/sessionProvider";
 import supabase from "../../config/supabaseClient";
 
 export default function Student(): JSX.Element {
   const { session } = useSession() as { session: string | null };
-  const student = useLoaderData() as StudentType & {
-    grade: string;
-    section: string;
+  const { student, course } = useLoaderData() as {
+    student: StudentType;
+    course: CourseType | undefined;
   };
   const navigate = useNavigate();
 
@@ -64,7 +64,7 @@ export default function Student(): JSX.Element {
           <Avatar size={200} icon={<UserOutlined />}></Avatar>
         </div>
         <div className="data-container">
-          <StudentData student={student} />
+          <StudentData student={student} course={course} />
         </div>
       </div>
     </div>

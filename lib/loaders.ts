@@ -19,11 +19,7 @@ export async function studentsLoader() {
   return students;
 }
 
-export async function studentsLoaderByCourse({
-  params,
-}: {
-  params: { courseId: number };
-}) {
+export async function studentsLoaderByCourse({ params }: { params: any }) {
   const { data: students, error } = await supabase
     .from("students")
     .select()
@@ -35,11 +31,7 @@ export async function studentsLoaderByCourse({
   return students;
 }
 
-export async function studentLoaderById({
-  params,
-}: {
-  params: { studentId: number };
-}) {
+export async function studentLoaderById({ params }: { params: any }) {
   const { data: student, error: studentError } = await supabase
     .from("students")
     .select()
@@ -61,13 +53,10 @@ export async function studentLoaderById({
         "Error " + courseError.code + ": " + courseError.message + "."
       );
     }
-    student[0].grade = course[0].grade;
-    student[0].section = course[0].section;
+    return { student: student[0], course: course[0] };
   } else {
-    student[0].grade = null;
-    student[0].section = null;
+    return { student: student[0] };
   }
-  return student[0];
 }
 
 export async function coursesAndstudentsNamesLoader() {

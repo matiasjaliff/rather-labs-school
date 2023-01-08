@@ -56,8 +56,7 @@ Outside `src` there are two important folders:
 - Create, edit and delete courses.
 - Edit students.
 - Authenticated sessions.
-- Cleaner CSS.
-- Solve some loaders type inconsistency.
+- Clean CSS.
 
 ---
 

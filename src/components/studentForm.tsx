@@ -2,13 +2,12 @@ import { useState, useEffect } from "react";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import type { CourseType, StudentType } from "../../config/types";
 import { Button, Checkbox, DatePicker, Form, Input, Select } from "antd";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 import supabase from "../../config/supabaseClient";
 
 export default function StudentForm(): JSX.Element {
   const params = useParams();
   const selectedStudentId = Number(params.studentId);
-  console.log(selectedStudentId);
   const [form] = Form.useForm();
   const dateFormat = "YYYY-MM-DD";
   const { courses, students } = useLoaderData() as {

@@ -38,7 +38,7 @@ export default function Student(): JSX.Element {
                 type="primary"
                 size="large"
                 htmlType="button"
-                onClick={() => console.log("Edit student")}
+                onClick={() => navigate(`/students/edit/${student.student_id}`)}
               >
                 Edit student
               </Button>

@@ -39,12 +39,13 @@ const columns: ColumnsType<StudentType> = [
   },
   {
     title: "Actions",
+    dataIndex: "student_id",
     key: "actions",
     width: "180px",
     align: "center",
-    render: () => (
+    render: (text: number) => (
       <Space size="middle">
-        <a>Edit</a> |<a>Delete</a>
+        <Link to={`/students/edit/${text}`}>Edit</Link> |<a>Delete</a>
       </Space>
     ),
   },

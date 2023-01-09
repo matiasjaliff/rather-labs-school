@@ -8,7 +8,7 @@ import {
   studentsLoader,
   studentsLoaderByCourse,
   studentLoaderById,
-  coursesAndstudentsNamesLoader,
+  coursesAndstudentsLoader,
 } from "../lib/loaders";
 import Root from "./routes/root";
 import Index from "./routes";
@@ -45,7 +45,7 @@ const router = createBrowserRouter([
       },
       {
         path: "students/new",
-        loader: coursesAndstudentsNamesLoader,
+        loader: coursesAndstudentsLoader,
         element: <EditStudent />,
         errorElement: <ErrorPage />,
       },
@@ -53,6 +53,12 @@ const router = createBrowserRouter([
         path: "students/:studentId",
         loader: studentLoaderById,
         element: <Student />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "students/edit/:studentId",
+        loader: coursesAndstudentsLoader,
+        element: <EditStudent />,
         errorElement: <ErrorPage />,
       },
     ],

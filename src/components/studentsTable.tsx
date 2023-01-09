@@ -76,12 +76,14 @@ const columnsAdmin: ColumnsType<StudentType> = [
   },
   {
     title: "Actions",
+    dataIndex: "student_id",
     key: "actions",
     width: "320px",
     align: "center",
-    render: () => (
+    render: (text: number) => (
       <Space size="middle">
-        <a>Edit</a> |<a>Delete</a> |<a>Remove from course</a>
+        <Link to={`/students/edit/${text}`}>Edit</Link> |<a>Delete</a> |
+        <a>Remove from course</a>
       </Space>
     ),
   },

@@ -59,7 +59,7 @@ export async function studentLoaderById({ params }: { params: any }) {
   }
 }
 
-export async function coursesAndstudentsNamesLoader() {
+export async function coursesAndstudentsLoader() {
   const { data: courses, error: coursesError } = await supabase
     .from("courses")
     .select();

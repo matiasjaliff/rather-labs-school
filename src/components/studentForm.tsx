@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import type { CourseType, StudentType } from "../../config/types";
 import { Button, Checkbox, DatePicker, Form, Input, Select } from "antd";
+import * as dayjs from "dayjs";
 import supabase from "../../config/supabaseClient";
 
 export default function StudentForm(): JSX.Element {
   const params = useParams();
-  console.log(params);
+  const selectedStudentId = Number(params.studentId);
+  console.log(selectedStudentId);
   const [form] = Form.useForm();
   const dateFormat = "YYYY-MM-DD";
   const { courses, students } = useLoaderData() as {
@@ -19,19 +21,49 @@ export default function StudentForm(): JSX.Element {
   }));
   const navigate = useNavigate();
 
+  const selectedStudent: StudentType | undefined = !isNaN(selectedStudentId)
+    ? students.filter((student) => student.student_id === selectedStudentId)[0]
+    : undefined;
+
+  const selectedStudentCourse: CourseType | undefined = !isNaN(
+    selectedStudentId
+  )
+    ? courses.filter(
+        (course) => course.course_id === selectedStudent?.course_id
+      )[0]
+    : undefined;
+
   // Form states
 
-  const [last_name, setLastName] = useState<string>("");
-  const [first_name, setFirstName] = useState<string>("");
-  const [middle_names, setMiddleNames] = useState<string>("");
-  const [birth_date, setBirthDate] = useState<string>("");
-  const [gender, setGender] = useState<string | undefined>(undefined);
-  const [grade, setGrade] = useState<string | undefined>(undefined);
-  const [section, setSection] = useState<string | undefined>(undefined);
-  const [course_id, setCourseId] = useState<number | undefined>(undefined);
-  const [has_siblings, setHasSiblings] = useState(false);
+  const [last_name, setLastName] = useState<string>(
+    selectedStudent?.last_name || ""
+  );
+  const [first_name, setFirstName] = useState<string>(
+    selectedStudent?.first_name || ""
+  );
+  const [middle_names, setMiddleNames] = useState<string>(
+    selectedStudent?.middle_names || ""
+  );
+  const [birth_date, setBirthDate] = useState<string>(
+    selectedStudent?.birth_date || ""
+  );
+  const [gender, setGender] = useState<string | undefined>(
+    selectedStudent?.gender
+  );
+  const [grade, setGrade] = useState<string | undefined>(
+    selectedStudentCourse?.grade
+  );
+  const [section, setSection] = useState<string | undefined>(
+    selectedStudentCourse?.section
+  );
+  const [course_id, setCourseId] = useState<number | undefined>(
+    selectedStudent?.course_id || undefined
+  );
+  const [has_siblings, setHasSiblings] = useState(
+    selectedStudent?.has_siblings || false
+  );
   const [siblings_ids, setSiblingsIds] = useState<number[] | undefined>(
-    undefined
+    selectedStudent?.siblings_ids || undefined
   );
 
   // List states to use in dropdown selectors
@@ -63,10 +95,25 @@ export default function StudentForm(): JSX.Element {
     if (section) setCourseId(courseId[0].course_id);
   }, [section]);
 
+  // Resetter
+
+  function handleReset(): void {
+    form.resetFields();
+    setLastName(selectedStudent?.last_name || "");
+    setFirstName(selectedStudent?.first_name || "");
+    setMiddleNames(selectedStudent?.middle_names || "");
+    setBirthDate(selectedStudent?.birth_date || "");
+    setGender(selectedStudent?.gender);
+    setGrade(selectedStudentCourse?.grade);
+    setSection(selectedStudentCourse?.section);
+    setCourseId(selectedStudent?.course_id || undefined);
+    setHasSiblings(selectedStudent?.has_siblings || false);
+    setSiblingsIds(selectedStudent?.siblings_ids || undefined);
+  }
+
   // Submitter
 
   async function handleSubmit(): Promise<void> {
-    console.log("Entrando");
     const { data, error } = await supabase.from("students").insert([
       {
         last_name,
@@ -94,7 +141,21 @@ export default function StudentForm(): JSX.Element {
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
       labelWrap={true}
-      initialValues={{ remember: true }}
+      initialValues={{
+        remember: true,
+        last_name: selectedStudent?.last_name,
+        first_name: selectedStudent?.first_name,
+        middle_names: selectedStudent?.middle_names,
+        birth_date: (() => {
+          return !isNaN(selectedStudentId)
+            ? dayjs(selectedStudent?.birth_date, dateFormat)
+            : undefined;
+        })(),
+        gender: selectedStudent?.gender,
+        grade: selectedStudentCourse?.grade,
+        section: selectedStudentCourse?.section,
+        has_siblings: selectedStudent?.has_siblings,
+      }}
       autoComplete="off"
       size="large"
       method="post"
@@ -168,6 +229,7 @@ export default function StudentForm(): JSX.Element {
                 form.resetFields(["section"]);
                 setGrade(value);
                 setSection(undefined);
+                form.setFieldValue("section", undefined);
               }}
             >
               {gradesList.map((grade) => (
@@ -222,7 +284,7 @@ export default function StudentForm(): JSX.Element {
         </Button>
         <Button
           htmlType="button"
-          onClick={() => form.resetFields()}
+          onClick={handleReset}
           style={{ marginLeft: "10px" }}
         >
           Reset

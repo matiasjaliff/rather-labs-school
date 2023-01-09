@@ -2,6 +2,19 @@ import { Link } from "react-router-dom";
 import { Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { StudentType } from "../../config/types";
+import supabase from "../../config/supabaseClient";
+
+async function handleDelete(student_id: number) {
+  const { data, error } = await supabase
+    .from("students")
+    .delete()
+    .eq("student_id", student_id);
+  if (error) {
+    console.log(error);
+    throw new Error("Error " + error.code + ": " + error.message + ".");
+  }
+  console.log(data);
+}
 
 const columns: ColumnsType<StudentType> = [
   {
@@ -43,9 +56,19 @@ const columns: ColumnsType<StudentType> = [
     key: "actions",
     width: "180px",
     align: "center",
-    render: (text: number) => (
+    render: (student_id: number) => (
       <Space size="middle">
-        <Link to={`/students/edit/${text}`}>Edit</Link> |<a>Delete</a>
+        <Link to={`/students/edit/${student_id}`}>Edit</Link> |
+        <a
+          href={"/students"}
+          onClick={() => {
+            void (async () => {
+              await handleDelete(student_id);
+            })();
+          }}
+        >
+          Delete
+        </a>
       </Space>
     ),
   },

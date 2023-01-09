@@ -133,6 +133,30 @@ export default function StudentForm(): JSX.Element {
     navigate("/");
   }
 
+  // Updater
+
+  async function handleUpdate(): Promise<void> {
+    const { data, error } = await supabase
+      .from("students")
+      .update({
+        last_name: last_name,
+        first_name: first_name,
+        middle_names: middle_names,
+        birth_date: birth_date,
+        gender: gender,
+        has_siblings: has_siblings,
+        course_id: course_id,
+        siblings_ids: siblings_ids,
+      })
+      .eq("student_id", selectedStudentId);
+    if (error) {
+      console.log(error);
+      throw new Error("Error " + error.code + ": " + error.message + ".");
+    }
+    console.log(data);
+    navigate("/");
+  }
+
   return (
     <Form
       form={form}
@@ -160,7 +184,11 @@ export default function StudentForm(): JSX.Element {
       method="post"
       onFinish={() => {
         void (async () => {
-          await handleSubmit();
+          if (!isNaN(selectedStudentId)) {
+            await handleUpdate();
+          } else {
+            await handleSubmit();
+          }
         })();
       }}
     >
@@ -279,7 +307,7 @@ export default function StudentForm(): JSX.Element {
       </div>
       <Form.Item wrapperCol={{ offset: 0 }} style={{ textAlign: "right" }}>
         <Button type="primary" htmlType="submit">
-          Submit
+          {!isNaN(selectedStudentId) ? "Update" : "Submit"}
         </Button>
         <Button
           htmlType="button"

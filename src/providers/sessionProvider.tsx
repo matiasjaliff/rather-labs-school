@@ -1,4 +1,9 @@
+////////// IMPORTS //////////
+
+// React
 import { createContext, useContext, useState } from "react";
+
+////////// DEFINITIONS //////////
 
 const SessionContext = createContext({});
 const SessionUpdateContext = createContext({});
@@ -11,16 +16,20 @@ export function useSessionUpdate() {
   return useContext(SessionUpdateContext);
 }
 
-export function SessionProvider({ children }: { children: JSX.Element }) {
+////////// COMPONENT //////////
+
+export function SessionProvider({
+  children,
+}: {
+  children: JSX.Element;
+}): JSX.Element {
   const [session, setSession] = useState(sessionStorage.getItem("auth"));
 
   return (
-    <>
-      <SessionContext.Provider value={{ session }}>
-        <SessionUpdateContext.Provider value={setSession}>
-          {children}
-        </SessionUpdateContext.Provider>
-      </SessionContext.Provider>
-    </>
+    <SessionContext.Provider value={{ session }}>
+      <SessionUpdateContext.Provider value={setSession}>
+        {children}
+      </SessionUpdateContext.Provider>
+    </SessionContext.Provider>
   );
 }

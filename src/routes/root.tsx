@@ -1,6 +1,15 @@
+////////// IMPORTS //////////
+
+// React Router
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { Button } from "antd";
+
+// Providers
 import { useSession, useSessionUpdate } from "../providers/sessionProvider";
+
+// Components
+import { Button } from "antd";
+
+////////// COMPONENT //////////
 
 export default function Root(): JSX.Element {
   const { session } = useSession() as { session: string | null };
@@ -27,11 +36,7 @@ export default function Root(): JSX.Element {
           </Link>
         </div>
         <nav style={{ marginTop: "36px", textAlign: "center" }}>
-          <Button
-            type="primary"
-            htmlType="button"
-            onClick={() => toggleSession()}
-          >
+          <Button type="primary" htmlType="button" onClick={toggleSession}>
             {!session ? "Login" : "Logout"}
           </Button>
           {session ? (

@@ -1,5 +1,9 @@
+////////// IMPORTS //////////
+
+// React
 import { createContext, useContext, useState } from "react";
-import type { CourseType, StudentType } from "../../config/types";
+
+////////// DEFINITIONS //////////
 
 const SelectionsContext = createContext({});
 const SelectionsUpdateContext = createContext({});
@@ -12,23 +16,21 @@ export function useSelectionsUpdate() {
   return useContext(SelectionsUpdateContext);
 }
 
-export function SelectionsProvider({ children }: { children: JSX.Element }) {
+////////// COMPONENT //////////
+
+export function SelectionsProvider({
+  children,
+}: {
+  children: JSX.Element;
+}): JSX.Element {
   const [selectedCourse, setSelectedCourse] = useState({});
   const [selectedStudent, setSelectedStudent] = useState({});
-
-  function handleCourseSelection(course: CourseType) {
-    setSelectedCourse(course);
-  }
-
-  function handleStudentSelection(student: StudentType) {
-    setSelectedStudent(student);
-  }
 
   return (
     <>
       <SelectionsContext.Provider value={{ selectedCourse, selectedStudent }}>
         <SelectionsUpdateContext.Provider
-          value={{ handleCourseSelection, handleStudentSelection }}
+          value={{ setSelectedCourse, setSelectedStudent }}
         >
           {children}
         </SelectionsUpdateContext.Provider>

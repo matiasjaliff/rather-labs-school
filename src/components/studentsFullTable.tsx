@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import type { StudentType } from "../../config/types";
+import type { StudentType } from "../../config/databaseTypes";
 import supabase from "../../config/supabaseClient";
 
 async function handleDelete(student_id: number) {

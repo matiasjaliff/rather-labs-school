@@ -1,5 +1,4 @@
 import supabase from "../config/supabaseClient";
-import type { StudentType } from "../config/types";
 
 export async function coursesLoader() {
   const { data: courses, error } = await supabase.from("courses").select();

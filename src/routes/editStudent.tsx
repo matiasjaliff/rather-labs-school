@@ -1,7 +1,14 @@
+////////// IMPORTS //////////
+
+// React Router
+import { useParams } from "react-router-dom";
+
+// Components
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar } from "antd";
-import { useParams } from "react-router-dom";
 import StudentForm from "../components/studentForm";
+
+////////// COMPONENT //////////
 
 export default function EditStudent(): JSX.Element {
   const params = useParams();

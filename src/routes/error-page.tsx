@@ -1,9 +1,16 @@
+////////// IMPORTS //////////
+
+// React Router
 import { useRouteError } from "react-router-dom";
+
+////////// DEFINITIONS //////////
 
 interface errorType {
   statusText?: string;
   message?: string;
 }
+
+////////// COMPONENT //////////
 
 export default function ErrorPage(): JSX.Element {
   const error = useRouteError() as errorType;

@@ -1,6 +1,15 @@
+////////// IMPORTS //////////
+
+// React Router
 import { Link } from "react-router-dom";
+
+// Types
+import type { StudentType, CourseType } from "../../config/databaseTypes";
+
+// Components
 import { Descriptions } from "antd";
-import type { StudentType, CourseType } from "../../config/types";
+
+////////// COMPONENT //////////
 
 export default function StudentData({
   student,

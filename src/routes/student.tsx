@@ -1,13 +1,25 @@
+////////// IMPORTS //////////
+
+// React Router
 import { useLoaderData, useNavigate } from "react-router-dom";
+
+// Providers
+import { useSession } from "../providers/sessionProvider";
+
+// Supabase client
+import supabase from "../../config/supabaseClient";
+
+// Types
+import type { CourseType, StudentType } from "../../config/databaseTypes";
+
+// Components
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Button } from "antd";
 import StudentData from "../components/studentData";
-import type { CourseType, StudentType } from "../../config/types";
-import { useSession } from "../providers/sessionProvider";
-import supabase from "../../config/supabaseClient";
+
+////////// COMPONENT //////////
 
 export default function Student(): JSX.Element {
-  const { session } = useSession() as { session: string | null };
   const { student, siblings, course } = useLoaderData() as {
     student: StudentType;
     siblings: StudentType[];
@@ -15,6 +27,9 @@ export default function Student(): JSX.Element {
   };
   const navigate = useNavigate();
 
+  const { session } = useSession() as { session: string | null };
+
+  // Este handleDelete junto con el de studentsTable podrían ser el mismo y ser importado
   async function handleDelete(): Promise<void> {
     const { data, error } = await supabase
       .from("students")

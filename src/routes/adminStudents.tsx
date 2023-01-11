@@ -1,5 +1,5 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
-import type { StudentType } from "../../config/types";
+import type { StudentType } from "../../config/databaseTypes";
 import { Button } from "antd";
 import StudentsFullTable from "../components/studentsFullTable";
 

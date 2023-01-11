@@ -1,5 +1,12 @@
+////////// IMPORTS //////////
+
+// Types
+import type { CourseType } from "../../config/databaseTypes";
+
+// Components
 import { Card } from "antd";
-import type { CourseType } from "../../config/types";
+
+////////// COMPONENT //////////
 
 export default function CourseCard({
   course,

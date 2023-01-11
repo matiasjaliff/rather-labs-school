@@ -1,11 +1,24 @@
+////////// IMPORTS //////////
+
+// React Router
 import { Link } from "react-router-dom";
-import { Space, Table } from "antd";
-import type { ColumnsType } from "antd/es/table";
-import type { StudentType } from "../../config/types";
+
+// Providers
 import { useSession } from "../providers/sessionProvider";
+
+// Supabase client
 import supabase from "../../config/supabaseClient";
 
-async function handleDelete(student_id: number) {
+// Types
+import type { StudentType } from "../../config/databaseTypes";
+
+// Components
+import { Space, Table } from "antd";
+import type { ColumnsType } from "antd/es/table";
+
+////////// DEFINITIONS //////////
+
+async function handleDelete(student_id: number): Promise<void> {
   const { data, error } = await supabase
     .from("students")
     .delete()
@@ -111,6 +124,8 @@ const columnsAdmin: ColumnsType<StudentType> = [
     ),
   },
 ];
+
+////////// COMPONENT //////////
 
 export default function StudentsTable({
   students,

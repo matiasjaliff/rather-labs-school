@@ -1,117 +1,133 @@
+////////// IMPORTS //////////
+
+// React and React Router
 import { useState, useEffect } from "react";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
-import type { CourseType, StudentType } from "../../config/types";
-import { Button, Checkbox, DatePicker, Form, Input, Select } from "antd";
+
+// Dates management library
 import dayjs from "dayjs";
+
+// Supabase client
 import supabase from "../../config/supabaseClient";
+
+// Types
+import type { CourseType, StudentType } from "../../config/databaseTypes";
+
+// Components
+import { Button, Checkbox, DatePicker, Form, Input, Select } from "antd";
+
+////////// COMPONENT //////////
 
 export default function StudentForm(): JSX.Element {
   const params = useParams();
-  const selectedStudentId = Number(params.studentId);
-  const [form] = Form.useForm();
-  const dateFormat = "YYYY-MM-DD";
   const { courses, students } = useLoaderData() as {
     courses: CourseType[];
     students: StudentType[];
   };
-  const studentsNamesList = students.map((student) => ({
-    value: student.student_id,
-    label: `${student.last_name}, ${student.first_name} ${student.middle_names}`,
-  }));
   const navigate = useNavigate();
 
-  const selectedStudent: StudentType | undefined = !isNaN(selectedStudentId)
-    ? students.filter((student) => student.student_id === selectedStudentId)[0]
-    : undefined;
+  const selectedStudentId = Number(params.studentId);
+  const studentsNamesList = students
+    .filter((student) => student.student_id !== selectedStudentId)
+    .map((student) => ({
+      value: student.student_id,
+      label: `${student.last_name}, ${student.first_name} ${student.middle_names}`,
+    }));
 
-  const selectedStudentCourse: CourseType | undefined = !isNaN(
-    selectedStudentId
-  )
+  const [form] = Form.useForm();
+  const dateFormat = "YYYY-MM-DD";
+
+  const selectedStudent: StudentType | null = !isNaN(selectedStudentId)
+    ? students.filter((student) => student.student_id === selectedStudentId)[0]
+    : null;
+
+  const selectedStudentCourse: CourseType | null = !isNaN(selectedStudentId)
     ? courses.filter(
         (course) => course.course_id === selectedStudent?.course_id
       )[0]
-    : undefined;
+    : null;
+
+  // Initial values
+  const initialValues = {
+    last_name: selectedStudent?.last_name || undefined,
+    first_name: selectedStudent?.first_name || undefined,
+    middle_names: selectedStudent?.middle_names || "",
+    birth_date: selectedStudent?.birth_date || undefined,
+    gender: selectedStudent?.gender || undefined,
+    grade: selectedStudentCourse?.grade || undefined,
+    section: selectedStudentCourse?.section || undefined,
+    course_id: selectedStudent?.course_id || undefined,
+    has_siblings: selectedStudent?.has_siblings || false,
+    siblings_ids: selectedStudent?.siblings_ids || [],
+  };
 
   // Form states
+  const [last_name, setLastName] = useState(initialValues.last_name);
+  const [first_name, setFirstName] = useState(initialValues.first_name);
+  const [middle_names, setMiddleNames] = useState(initialValues.middle_names);
+  const [birth_date, setBirthDate] = useState(initialValues.birth_date);
+  const [gender, setGender] = useState(initialValues.gender);
+  const [grade, setGrade] = useState(initialValues.grade);
+  const [section, setSection] = useState(initialValues.section);
+  const [course_id, setCourseId] = useState(initialValues.course_id);
+  const [has_siblings, setHasSiblings] = useState(initialValues.has_siblings);
+  const [siblings_ids, setSiblingsIds] = useState(initialValues.siblings_ids);
 
-  const [last_name, setLastName] = useState<string>(
-    selectedStudent?.last_name || ""
-  );
-  const [first_name, setFirstName] = useState<string>(
-    selectedStudent?.first_name || ""
-  );
-  const [middle_names, setMiddleNames] = useState<string>(
-    selectedStudent?.middle_names || ""
-  );
-  const [birth_date, setBirthDate] = useState<string>(
-    selectedStudent?.birth_date || ""
-  );
-  const [gender, setGender] = useState<string | undefined>(
-    selectedStudent?.gender
-  );
-  const [grade, setGrade] = useState<string | undefined>(
-    selectedStudentCourse?.grade
-  );
-  const [section, setSection] = useState<string | undefined>(
-    selectedStudentCourse?.section
-  );
-  const [course_id, setCourseId] = useState<number | undefined>(
-    selectedStudent?.course_id || undefined
-  );
-  const [has_siblings, setHasSiblings] = useState(
-    selectedStudent?.has_siblings || false
-  );
-  const [siblings_ids, setSiblingsIds] = useState<number[]>(
-    selectedStudent?.siblings_ids || []
-  );
+  ////////// GRADE AND SECTION DROPDOWN SELECTORS MANAGEMENT //////////
 
   // List states to use in dropdown selectors
-
   const [gradesList, setGradesList] = useState([""]);
   const [sectionsList, setSectionsList] = useState([""]);
 
-  // Effects and handler to populate list states
-
+  // Grades list generator
   useEffect(() => {
-    const grades: string[] = [];
+    const availableGrades: string[] = [];
     courses.forEach((course) => {
-      if (!grades.includes(course.grade)) grades.push(course.grade);
+      if (!availableGrades.includes(course.grade))
+        availableGrades.push(course.grade);
     });
-    setGradesList(grades);
+    setGradesList(availableGrades);
   }, []);
 
+  // Available sections list generator (depends on selected grade)
   useEffect(() => {
-    const sections: string[] = courses
+    const availableSections: string[] = courses
       .filter((course) => course.grade === grade)
       .map((course) => course.section);
-    setSectionsList(sections);
+    setSectionsList(availableSections);
+    setCourseId(undefined);
   }, [grade]);
 
+  // Course id finder (depends on selected grade and course)
   useEffect(() => {
-    const courseId = courses.filter(
-      (course) => course.grade === grade && course.section === section
-    );
-    if (section) setCourseId(courseId[0].course_id);
+    if (section) {
+      const selectedCourseId = courses.filter(
+        (course) => course.grade === grade && course.section === section
+      )[0].course_id;
+      setCourseId(selectedCourseId);
+    } else {
+      setCourseId(undefined);
+    }
   }, [section]);
 
-  // Resetter
+  ////////// HANDLERS //////////
 
+  // Resetter
   function handleReset(): void {
     form.resetFields();
-    setLastName(selectedStudent?.last_name || "");
-    setFirstName(selectedStudent?.first_name || "");
-    setMiddleNames(selectedStudent?.middle_names || "");
-    setBirthDate(selectedStudent?.birth_date || "");
-    setGender(selectedStudent?.gender);
-    setGrade(selectedStudentCourse?.grade);
-    setSection(selectedStudentCourse?.section);
-    setCourseId(selectedStudent?.course_id || undefined);
-    setHasSiblings(selectedStudent?.has_siblings || false);
-    setSiblingsIds(selectedStudent?.siblings_ids || []);
+    setLastName(initialValues.last_name);
+    setFirstName(initialValues.first_name);
+    setMiddleNames(initialValues.middle_names);
+    setBirthDate(initialValues.birth_date);
+    setGender(initialValues.gender);
+    setGrade(initialValues.grade);
+    setSection(initialValues.section);
+    setCourseId(initialValues.course_id);
+    setHasSiblings(initialValues.has_siblings);
+    setSiblingsIds(initialValues.siblings_ids);
   }
 
   // Submitter
-
   async function handleSubmit(): Promise<void> {
     const { data, error } = await supabase.from("students").insert([
       {
@@ -134,7 +150,6 @@ export default function StudentForm(): JSX.Element {
   }
 
   // Updater
-
   async function handleUpdate(): Promise<void> {
     const { data, error } = await supabase
       .from("students")
@@ -166,18 +181,19 @@ export default function StudentForm(): JSX.Element {
       labelWrap={true}
       initialValues={{
         remember: true,
-        last_name: selectedStudent?.last_name,
-        first_name: selectedStudent?.first_name,
-        middle_names: selectedStudent?.middle_names,
+        last_name: initialValues.last_name,
+        first_name: initialValues.first_name,
+        middle_names: initialValues.middle_names,
         birth_date: (() => {
           return !isNaN(selectedStudentId)
             ? dayjs(selectedStudent?.birth_date, dateFormat)
             : undefined;
         })(),
-        gender: selectedStudent?.gender,
-        grade: selectedStudentCourse?.grade,
-        section: selectedStudentCourse?.section,
-        has_siblings: selectedStudent?.has_siblings,
+        gender: initialValues.gender,
+        grade: initialValues.grade,
+        section: initialValues.section,
+        has_siblings: initialValues.has_siblings,
+        siblings_ids: initialValues.siblings_ids,
       }}
       autoComplete="off"
       size="large"
@@ -253,11 +269,11 @@ export default function StudentForm(): JSX.Element {
             <Select
               placeholder="Select grade"
               onChange={(value: string) => {
-                form.resetFields(["section"]);
                 setGrade(value);
                 setSection(undefined);
-                form.setFieldValue("section", undefined);
+                form.resetFields(["section"]);
               }}
+              allowClear
             >
               {gradesList.map((grade) => (
                 <Select.Option key={grade} value={grade}>
@@ -268,7 +284,11 @@ export default function StudentForm(): JSX.Element {
           </Form.Item>
 
           <Form.Item label="Section" name="section">
-            <Select placeholder="Select section" onChange={setSection}>
+            <Select
+              placeholder="Select section"
+              onChange={setSection}
+              allowClear
+            >
               {sectionsList.map((section) => (
                 <Select.Option key={section} value={section}>
                   {section}
@@ -282,10 +302,17 @@ export default function StudentForm(): JSX.Element {
             name="has_siblings"
             valuePropName="checked"
           >
-            <Checkbox onChange={() => setHasSiblings(!has_siblings)}></Checkbox>
+            <Checkbox
+              onChange={() => {
+                if (has_siblings) {
+                  form.setFieldValue("siblings_ids", []);
+                }
+                setHasSiblings(!has_siblings);
+              }}
+            ></Checkbox>
           </Form.Item>
 
-          <Form.Item label="Siblings" name="siblings">
+          <Form.Item label="Siblings" name="siblings_ids">
             <Select
               disabled={!has_siblings}
               mode="multiple"

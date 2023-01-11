@@ -1,13 +1,25 @@
+////////// IMPORTS //////////
+
+// React Router
 import { useLoaderData } from "react-router-dom";
-import { Button } from "antd";
-import type { CourseType, StudentType } from "../../config/types";
+
+// Providers
 import { useSession } from "../providers/sessionProvider";
 import { useSelections } from "../providers/selectionsProvider";
+
+// Types
+import type { CourseType, StudentType } from "../../config/databaseTypes";
+
+// Components
+import { Button } from "antd";
 import StudentsTable from "../components/studentsTable";
 
+////////// COMPONENT //////////
+
 export default function Course(): JSX.Element {
-  const { session } = useSession() as { session: string | null };
   const students = useLoaderData() as StudentType[];
+
+  const { session } = useSession() as { session: string | null };
   const { selectedCourse } = useSelections() as {
     selectedCourse: CourseType;
   };

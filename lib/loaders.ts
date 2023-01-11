@@ -32,30 +32,40 @@ export async function studentsLoaderByCourse({ params }: { params: any }) {
 }
 
 export async function studentLoaderById({ params }: { params: any }) {
-  const { data: student, error: studentError } = await supabase
+  const { data: students, error: studentsError } = await supabase
     .from("students")
-    .select()
-    .eq("student_id", params.studentId);
-  if (studentError) {
-    console.log(studentError);
+    .select();
+  if (studentsError) {
+    console.log(studentsError);
     throw new Error(
-      "Error " + studentError.code + ": " + studentError.message + "."
+      "Error " + studentsError.code + ": " + studentsError.message + "."
     );
   }
-  if (student[0].course_id) {
+  const selectedStudent = students.filter(
+    (student) => student.student_id === Number(params.studentId)
+  )[0];
+  const siblingsList = selectedStudent.siblings_ids?.map(
+    (siblingId) =>
+      students.filter((student) => student.student_id === siblingId)[0]
+  );
+  if (selectedStudent.course_id) {
     const { data: course, error: courseError } = await supabase
       .from("courses")
       .select()
-      .eq("course_id", student[0].course_id);
+      .eq("course_id", selectedStudent.course_id);
     if (courseError) {
       console.log(courseError);
       throw new Error(
         "Error " + courseError.code + ": " + courseError.message + "."
       );
     }
-    return { student: student[0], course: course[0] };
+    return {
+      student: selectedStudent,
+      siblings: siblingsList,
+      course: course[0],
+    };
   } else {
-    return { student: student[0] };
+    return { student: selectedStudent, siblings: siblingsList };
   }
 }
 

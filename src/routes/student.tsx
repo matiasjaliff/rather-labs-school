@@ -8,8 +8,9 @@ import supabase from "../../config/supabaseClient";
 
 export default function Student(): JSX.Element {
   const { session } = useSession() as { session: string | null };
-  const { student, course } = useLoaderData() as {
+  const { student, siblings, course } = useLoaderData() as {
     student: StudentType;
+    siblings: StudentType[];
     course: CourseType | undefined;
   };
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ export default function Student(): JSX.Element {
           <Avatar size={200} icon={<UserOutlined />}></Avatar>
         </div>
         <div className="data-container">
-          <StudentData student={student} course={course} />
+          <StudentData student={student} siblings={siblings} course={course} />
         </div>
       </div>
     </div>

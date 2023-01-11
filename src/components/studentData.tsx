@@ -1,11 +1,14 @@
+import { Link } from "react-router-dom";
 import { Descriptions } from "antd";
 import type { StudentType, CourseType } from "../../config/types";
 
 export default function StudentData({
   student,
+  siblings,
   course,
 }: {
   student: StudentType;
+  siblings: StudentType[];
   course: CourseType | undefined;
 }): JSX.Element {
   return (
@@ -32,7 +35,16 @@ export default function StudentData({
         {student.has_siblings ? "Yes" : "No"}
       </Descriptions.Item>
       <Descriptions.Item label="Siblings" span={3}>
-        {student.has_siblings ? "-" : "None"}
+        {student.has_siblings
+          ? siblings.map((sibling) => (
+              <Link
+                to={`/students/${sibling.student_id}`}
+                key={sibling.student_id}
+              >
+                <p>{`${sibling.last_name}, ${sibling.first_name} ${sibling.middle_names}`}</p>
+              </Link>
+            ))
+          : "None"}
       </Descriptions.Item>
     </Descriptions>
   );

@@ -54,7 +54,6 @@ Outside `src` there are two important folders:
 
 - Visualize siblings in the student information view.
 - Create, edit and delete courses.
-- Edit students.
 - Authenticated sessions.
 - Clean CSS.
 

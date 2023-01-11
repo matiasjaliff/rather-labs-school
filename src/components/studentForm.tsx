@@ -107,7 +107,7 @@ export default function StudentForm(): JSX.Element {
     setSection(selectedStudentCourse?.section);
     setCourseId(selectedStudent?.course_id || undefined);
     setHasSiblings(selectedStudent?.has_siblings || false);
-    setSiblingsIds(selectedStudent?.siblings_ids || undefined);
+    setSiblingsIds(selectedStudent?.siblings_ids || []);
   }
 
   // Submitter

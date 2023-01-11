@@ -61,8 +61,8 @@ export default function StudentForm(): JSX.Element {
   const [has_siblings, setHasSiblings] = useState(
     selectedStudent?.has_siblings || false
   );
-  const [siblings_ids, setSiblingsIds] = useState<number[] | undefined>(
-    selectedStudent?.siblings_ids || undefined
+  const [siblings_ids, setSiblingsIds] = useState<number[]>(
+    selectedStudent?.siblings_ids || []
   );
 
   // List states to use in dropdown selectors

@@ -34,18 +34,20 @@ export default function StudentData({
       <Descriptions.Item label="Has siblings in the school?">
         {student.has_siblings ? "Yes" : "No"}
       </Descriptions.Item>
-      <Descriptions.Item label="Siblings" span={3}>
-        {student.has_siblings
-          ? siblings.map((sibling) => (
-              <Link
-                to={`/students/${sibling.student_id}`}
-                key={sibling.student_id}
-              >
-                <p>{`${sibling.last_name}, ${sibling.first_name} ${sibling.middle_names}`}</p>
-              </Link>
-            ))
-          : "None"}
-      </Descriptions.Item>
+      {student.has_siblings ? (
+        <Descriptions.Item label="Siblings" span={3}>
+          {siblings.map((sibling) => (
+            <Link
+              to={`/students/${sibling.student_id}`}
+              key={sibling.student_id}
+            >
+              <p>{`${sibling.last_name}, ${sibling.first_name} ${sibling.middle_names}`}</p>
+            </Link>
+          ))}
+        </Descriptions.Item>
+      ) : (
+        <></>
+      )}
     </Descriptions>
   );
 }

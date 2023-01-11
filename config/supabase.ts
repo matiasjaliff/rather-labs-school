@@ -11,66 +11,66 @@ export interface Database {
     Tables: {
       courses: {
         Row: {
+          capacity: number;
           course_id: number;
           created_at: string;
           grade: string;
           section: string;
           shift: string;
-          capacity: number;
         };
         Insert: {
-          course_id?: number;
-          created_at?: string;
-          grade: string;
-          section: string;
-          shift: string;
-          capacity: number;
-        };
-        Update: {
+          capacity?: number;
           course_id?: number;
           created_at?: string;
           grade?: string;
           section?: string;
           shift?: string;
+        };
+        Update: {
           capacity?: number;
+          course_id?: number;
+          created_at?: string;
+          grade?: string;
+          section?: string;
+          shift?: string;
         };
       };
       students: {
         Row: {
-          student_id: number;
+          birth_date: string;
+          course_id: number | null;
           created_at: string;
           first_name: string;
-          middle_names: string;
-          last_name: string;
-          birth_date: string;
           gender: string;
           has_siblings: boolean;
-          course_id: number | null;
-          siblings_ids: number[] | null;
+          last_name: string;
+          middle_names: string;
+          siblings_ids: number[];
+          student_id: number;
         };
         Insert: {
-          student_id?: number;
-          created_at?: string;
-          first_name: string;
-          middle_names?: string;
-          last_name: string;
-          birth_date: string;
-          gender?: string;
-          has_siblings?: boolean;
+          birth_date?: string;
           course_id?: number | null;
-          siblings_ids?: number[] | null;
-        };
-        Update: {
-          student_id?: number;
           created_at?: string;
           first_name?: string;
-          middle_names?: string;
-          last_name?: string;
-          birth_date?: string;
           gender?: string;
           has_siblings?: boolean;
+          last_name?: string;
+          middle_names?: string;
+          siblings_ids?: number[];
+          student_id?: number;
+        };
+        Update: {
+          birth_date?: string;
           course_id?: number | null;
-          siblings_ids?: number[] | null;
+          created_at?: string;
+          first_name?: string;
+          gender?: string;
+          has_siblings?: boolean;
+          last_name?: string;
+          middle_names?: string;
+          siblings_ids?: number[];
+          student_id?: number;
         };
       };
     };

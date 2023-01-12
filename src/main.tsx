@@ -3,19 +3,22 @@
 // React and React Router
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  LoaderFunction,
+  RouterProvider,
+} from "react-router-dom";
 
 // Providers
 import { SessionProvider } from "./providers/sessionProvider";
-import { SelectionsProvider } from "./providers/selectionsProvider";
 
 // Loaders
 import {
-  coursesLoader,
-  studentsLoader,
-  studentsLoaderByCourse,
+  allCoursesLoader,
+  allStudentsLoader,
+  allCoursesAndAllStudentsLoader,
+  oneCourseAndItsStudentsLoader,
   studentLoaderById,
-  coursesAndstudentsNamesLoader,
 } from "../lib/loaders";
 
 // Components
@@ -42,36 +45,36 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Index />,
-        loader: coursesLoader,
+        loader: allCoursesLoader as LoaderFunction,
         errorElement: <ErrorPage />,
       },
       {
         path: "courses/:courseId",
         element: <Course />,
-        loader: studentsLoaderByCourse,
+        loader: oneCourseAndItsStudentsLoader as LoaderFunction,
         errorElement: <ErrorPage />,
       },
       {
         path: "/students",
-        loader: studentsLoader,
+        loader: allStudentsLoader as LoaderFunction,
         element: <AdminStudents />,
         errorElement: <ErrorPage />,
       },
       {
         path: "students/new",
-        loader: coursesAndstudentsNamesLoader,
+        loader: allCoursesAndAllStudentsLoader as LoaderFunction,
         element: <EditStudent />,
         errorElement: <ErrorPage />,
       },
       {
         path: "students/:studentId",
-        loader: studentLoaderById,
+        loader: studentLoaderById as LoaderFunction,
         element: <Student />,
         errorElement: <ErrorPage />,
       },
       {
         path: "students/edit/:studentId",
-        loader: coursesAndstudentsNamesLoader,
+        loader: allCoursesAndAllStudentsLoader as LoaderFunction,
         element: <EditStudent />,
         errorElement: <ErrorPage />,
       },
@@ -84,9 +87,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <SessionProvider>
-      <SelectionsProvider>
-        <RouterProvider router={router} />
-      </SelectionsProvider>
+      <RouterProvider router={router} />
     </SessionProvider>
   </React.StrictMode>
 );

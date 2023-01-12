@@ -23,7 +23,7 @@ export default function Student(): JSX.Element {
   const { student, siblings, course } = useLoaderData() as {
     student: StudentType;
     siblings: StudentType[];
-    course: CourseType | undefined;
+    course: CourseType | null;
   };
   const navigate = useNavigate();
 

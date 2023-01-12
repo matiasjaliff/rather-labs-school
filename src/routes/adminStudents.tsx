@@ -1,7 +1,16 @@
+////////// IMPORTS //////////
+
+// React Router
 import { useLoaderData, useNavigate } from "react-router-dom";
+
+// Types
 import type { StudentType } from "../../config/databaseTypes";
+
+// Components
 import { Button } from "antd";
 import StudentsFullTable from "../components/studentsFullTable";
+
+////////// COMPONENT //////////
 
 export default function AdminStudents(): JSX.Element {
   const students = useLoaderData() as StudentType[];

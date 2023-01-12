@@ -18,15 +18,19 @@ export default function StudentData({
 }: {
   student: StudentType;
   siblings: StudentType[];
-  course: CourseType | undefined;
+  course: CourseType | null;
 }): JSX.Element {
   return (
     <Descriptions layout="vertical" bordered>
       <Descriptions.Item label="Student ID">
         {student.student_id}
       </Descriptions.Item>
-      <Descriptions.Item label="Grade">{course?.grade}</Descriptions.Item>
-      <Descriptions.Item label="Section">{course?.section}</Descriptions.Item>
+      <Descriptions.Item label="Grade">
+        {course?.grade || "Unassigned"}
+      </Descriptions.Item>
+      <Descriptions.Item label="Section">
+        {course?.section || "Unassigned"}
+      </Descriptions.Item>
       <Descriptions.Item label="Last Name">
         {student.last_name}
       </Descriptions.Item>

@@ -52,7 +52,6 @@ Outside `src` there are two important folders:
 
 ## **To Dos**
 
-- Visualize siblings in the student information view.
 - Create, edit and delete courses.
 - Authenticated sessions.
 - Clean CSS.

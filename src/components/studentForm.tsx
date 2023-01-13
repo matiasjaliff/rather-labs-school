@@ -13,6 +13,9 @@ import supabase from "../../config/supabaseClient";
 // Types
 import type { CourseType, StudentType } from "../../config/databaseTypes";
 
+// Actions
+import { addSiblings, removeSiblings } from "../../lib/actions";
+
 // Components
 import { Button, Checkbox, DatePicker, Form, Input, Select } from "antd";
 
@@ -127,31 +130,40 @@ export default function StudentForm(): JSX.Element {
     setSiblingsIds(initialValues.siblings_ids);
   }
 
-  // Submitter
-  async function handleSubmit(): Promise<void> {
-    const { data, error } = await supabase.from("students").insert([
-      {
-        last_name,
-        first_name,
-        middle_names,
-        birth_date,
-        gender,
-        has_siblings,
-        course_id,
-        siblings_ids,
-      },
-    ]);
+  // Creator
+  async function handleCreate() {
+    // Insert row with new student data
+    const { data: newStudent, error } = await supabase
+      .from("students")
+      .insert([
+        {
+          last_name,
+          first_name,
+          middle_names,
+          birth_date,
+          gender,
+          has_siblings: siblings_ids.length ? true : false, // To prevent "true" when there are no siblings selected
+          course_id,
+          siblings_ids,
+        },
+      ])
+      .select();
     if (error) {
       console.log(error);
       throw new Error("Error " + error.code + ": " + error.message + ".");
     }
-    console.log(data);
+    const newStudentId = newStudent[0].student_id;
+    if (siblings_ids.length) {
+      await addSiblings(siblings_ids, newStudentId);
+    }
+    console.log(newStudent);
     navigate("/");
   }
 
   // Updater
-  async function handleUpdate(): Promise<void> {
-    const { data, error } = await supabase
+  async function handleUpdate() {
+    // Update student data
+    const { data: updatedStudent, error } = await supabase
       .from("students")
       .update({
         last_name: last_name,
@@ -159,7 +171,7 @@ export default function StudentForm(): JSX.Element {
         middle_names: middle_names,
         birth_date: birth_date,
         gender: gender,
-        has_siblings: has_siblings,
+        has_siblings: siblings_ids.length ? true : false, // To prevent "true" when there are no siblings selected
         course_id: course_id,
         siblings_ids: siblings_ids,
       })
@@ -168,7 +180,27 @@ export default function StudentForm(): JSX.Element {
       console.log(error);
       throw new Error("Error " + error.code + ": " + error.message + ".");
     }
-    console.log(data);
+    // If siblings_ids was updated...
+    if (
+      JSON.stringify(initialValues.siblings_ids) !==
+      JSON.stringify(siblings_ids)
+    ) {
+      // Make a list of newSiblingsIds...
+      const newSiblingsIds = siblings_ids.filter(
+        (sibling_id) => !initialValues.siblings_ids.includes(sibling_id)
+      );
+      console.log(newSiblingsIds);
+      // And update siblings_ids list of every new sibling...
+      await addSiblings(newSiblingsIds, selectedStudentId);
+      // Then make a list of notSiblingsAnymoreIds...
+      const notSiblingsAnymoreIds = initialValues.siblings_ids.filter(
+        (sibling_id) => !siblings_ids.includes(sibling_id)
+      );
+      console.log(notSiblingsAnymoreIds);
+      // And update siblings_ids list of every not-sibling-anymore
+      await removeSiblings(notSiblingsAnymoreIds, selectedStudentId);
+    }
+    console.log(updatedStudent);
     navigate("/");
   }
 
@@ -203,7 +235,7 @@ export default function StudentForm(): JSX.Element {
           if (!isNaN(selectedStudentId)) {
             await handleUpdate();
           } else {
-            await handleSubmit();
+            await handleCreate();
           }
         })();
       }}
@@ -306,6 +338,7 @@ export default function StudentForm(): JSX.Element {
               onChange={() => {
                 if (has_siblings) {
                   form.setFieldValue("siblings_ids", []);
+                  setSiblingsIds([]);
                 }
                 setHasSiblings(!has_siblings);
               }}

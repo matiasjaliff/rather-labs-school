@@ -109,16 +109,17 @@ const columnsAdmin: ColumnsType<StudentType> = [
     render: (student_id: number) => (
       <Space size="middle">
         <Link to={`/students/edit/${student_id}`}>Edit</Link> |
-        <a
-          href={"/"}
-          onClick={() => {
-            void (async () => {
-              await handleDelete(student_id);
-            })();
-          }}
-        >
-          Delete
-        </a>
+        <Link to={"/"}>
+          <span
+            onClick={() => {
+              void (async () => {
+                await handleDelete(student_id);
+              })();
+            }}
+          >
+            Delete
+          </span>
+        </Link>
         |<a>Remove from course</a>
       </Space>
     ),

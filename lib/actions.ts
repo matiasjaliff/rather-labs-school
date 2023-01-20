@@ -51,6 +51,80 @@ export async function createNewStudent({
   console.log(newStudent);
 }
 
+// Update student
+export async function updateStudent({
+  selectedStudentId,
+  initialValues,
+  last_name,
+  first_name,
+  middle_names,
+  birth_date,
+  gender,
+  has_siblings,
+  course_id,
+  siblings_ids,
+}: {
+  selectedStudentId: number;
+  initialValues: {
+    last_name: string | undefined;
+    first_name: string | undefined;
+    middle_names: string;
+    birth_date: string | undefined;
+    gender: string | undefined;
+    grade: string | undefined;
+    section: string | undefined;
+    course_id: number | undefined;
+    has_siblings: boolean;
+    siblings_ids: number[];
+  };
+  last_name: string | undefined;
+  first_name: string | undefined;
+  middle_names: string | undefined;
+  birth_date: string | undefined;
+  gender: string | undefined;
+  has_siblings: boolean;
+  course_id: number | undefined;
+  siblings_ids: number[];
+}): Promise<void> {
+  const { data: updatedStudent, error } = await supabase
+    .from("students")
+    .update({
+      last_name: last_name,
+      first_name: first_name,
+      middle_names: middle_names,
+      birth_date: birth_date,
+      gender: gender,
+      has_siblings: siblings_ids.length ? true : false, // To prevent "true" when there are no siblings selected
+      course_id: course_id,
+      siblings_ids: siblings_ids,
+    })
+    .eq("student_id", selectedStudentId);
+  if (error) {
+    console.log(error);
+    throw new Error("Error " + error.code + ": " + error.message + ".");
+  }
+  // If siblings_ids was updated...
+  if (
+    JSON.stringify(initialValues.siblings_ids) !== JSON.stringify(siblings_ids)
+  ) {
+    // Make a list of newSiblingsIds...
+    const newSiblingsIds = siblings_ids.filter(
+      (sibling_id) => !initialValues.siblings_ids.includes(sibling_id)
+    );
+    console.log(newSiblingsIds);
+    // And update siblings_ids list of every new sibling...
+    await addSiblings(newSiblingsIds, selectedStudentId);
+    // Then make a list of notSiblingsAnymoreIds...
+    const notSiblingsAnymoreIds = initialValues.siblings_ids.filter(
+      (sibling_id) => !siblings_ids.includes(sibling_id)
+    );
+    console.log(notSiblingsAnymoreIds);
+    // And update siblings_ids list of every not-sibling-anymore
+    await removeSiblings(notSiblingsAnymoreIds, selectedStudentId);
+  }
+  console.log(updatedStudent);
+}
+
 // Add selectedStudentId to its siblings' siblings_ids lists
 export async function addSiblings(
   siblings_ids: number[],

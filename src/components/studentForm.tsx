@@ -14,7 +14,11 @@ import supabase from "../../config/supabaseClient";
 import type { CourseType, StudentType } from "../../config/databaseTypes";
 
 // Actions
-import { addSiblings, removeSiblings } from "../../lib/actions";
+import {
+  createNewStudent,
+  addSiblings,
+  removeSiblings,
+} from "../../lib/actions";
 
 // Components
 import { Button, Checkbox, DatePicker, Form, Input, Select } from "antd";
@@ -132,31 +136,16 @@ export default function StudentForm(): JSX.Element {
 
   // Creator
   async function handleCreate() {
-    // Insert row with new student data
-    const { data: newStudent, error } = await supabase
-      .from("students")
-      .insert([
-        {
-          last_name,
-          first_name,
-          middle_names,
-          birth_date,
-          gender,
-          has_siblings: siblings_ids.length ? true : false, // To prevent "true" when there are no siblings selected
-          course_id,
-          siblings_ids,
-        },
-      ])
-      .select();
-    if (error) {
-      console.log(error);
-      throw new Error("Error " + error.code + ": " + error.message + ".");
-    }
-    const newStudentId = newStudent[0].student_id;
-    if (siblings_ids.length) {
-      await addSiblings(siblings_ids, newStudentId);
-    }
-    console.log(newStudent);
+    await createNewStudent({
+      last_name,
+      first_name,
+      middle_names,
+      birth_date,
+      gender,
+      has_siblings: siblings_ids.length ? true : false, // To prevent "true" when there are no siblings selected
+      course_id,
+      siblings_ids,
+    });
     navigate("/");
   }
 
@@ -303,7 +292,7 @@ export default function StudentForm(): JSX.Element {
               onChange={(value: string) => {
                 setGrade(value);
                 setSection(undefined);
-                form.resetFields(["section"]);
+                form.setFieldValue("section", undefined);
               }}
               allowClear
             >

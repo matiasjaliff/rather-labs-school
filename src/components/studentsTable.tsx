@@ -1,34 +1,19 @@
 ////////// IMPORTS //////////
 
 // React Router
-import { Link } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 
 // Providers
 import { useSession } from "../providers/sessionProvider";
-
-// Supabase client
-import supabase from "../../config/supabaseClient";
 
 // Types
 import type { StudentType } from "../../config/databaseTypes";
 
 // Components
-import { Space, Table } from "antd";
+import { Space, Table, Button } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
 ////////// DEFINITIONS //////////
-
-async function handleDelete(student_id: number): Promise<void> {
-  const { data, error } = await supabase
-    .from("students")
-    .delete()
-    .eq("student_id", student_id);
-  if (error) {
-    console.log(error);
-    throw new Error("Error " + error.code + ": " + error.message + ".");
-  }
-  console.log(data);
-}
 
 const columns: ColumnsType<StudentType> = [
   {
@@ -107,20 +92,26 @@ const columnsAdmin: ColumnsType<StudentType> = [
     width: "320px",
     align: "center",
     render: (student_id: number) => (
-      <Space size="middle">
-        <Link to={`/students/edit/${student_id}`}>Edit</Link> |
-        <Link to={"/"}>
-          <span
-            onClick={() => {
-              void (async () => {
-                await handleDelete(student_id);
-              })();
-            }}
-          >
+      <Space size="small">
+        <Button type="link" size="small" href={`/students/${student_id}/edit`}>
+          Edit
+        </Button>
+        |
+        <Form method="post" action={`/students/${student_id}/delete`}>
+          <input
+            name="origin"
+            hidden
+            readOnly
+            value={location.pathname}
+          ></input>
+          <Button type="link" size="small" htmlType="submit">
             Delete
-          </span>
-        </Link>
-        |<a>Remove from course</a>
+          </Button>
+        </Form>
+        |
+        <Button type="link" size="small">
+          Remove from course
+        </Button>
       </Space>
     ),
   },

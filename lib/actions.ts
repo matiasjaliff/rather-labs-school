@@ -1,13 +1,34 @@
 ////////// IMPORTS //////////
 
+// React Router
+import { redirect } from "react-router-dom";
+
 // Supabase client
 import supabase from "../config/supabaseClient";
 
 ////////// ACTION FUNCTIONS //////////
 
 // Delete student
-export async function deleteStudent(studentId: number): Promise<void> {
-  console.log("Delete ID: ", studentId);
+export async function deleteStudent({
+  request,
+  params,
+}: {
+  request: any;
+  params: any;
+}): Promise<Response> {
+  const formData = (await request.formData()) as FormData;
+  const origin = Object.fromEntries(formData).origin as string;
+  const { data: deletedStudent, error } = await supabase
+    .from("students")
+    .delete()
+    .eq("student_id", params.studentId)
+    .select();
+  if (error) {
+    console.log(error);
+    throw new Error("Error " + error.code + ": " + error.message + ".");
+  }
+  console.log(deletedStudent);
+  return redirect(origin);
 }
 
 // Create new student

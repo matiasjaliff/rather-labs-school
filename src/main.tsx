@@ -4,6 +4,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import {
+  ActionFunction,
   createBrowserRouter,
   LoaderFunction,
   RouterProvider,
@@ -20,6 +21,9 @@ import {
   oneCourseAndItsStudentsLoader,
   studentLoaderById,
 } from "../lib/loaders";
+
+// Actions
+import { deleteStudent } from "../lib/actions";
 
 // Components
 import Root from "./routes/root";
@@ -73,10 +77,14 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       {
-        path: "students/edit/:studentId",
+        path: "students/:studentId/edit",
         loader: allCoursesAndAllStudentsLoader as LoaderFunction,
         element: <EditStudent />,
         errorElement: <ErrorPage />,
+      },
+      {
+        path: "students/:studentId/delete",
+        action: deleteStudent as ActionFunction,
       },
     ],
   },

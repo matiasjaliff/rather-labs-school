@@ -5,6 +5,11 @@ import supabase from "../config/supabaseClient";
 
 ////////// ACTION FUNCTIONS //////////
 
+// Delete student
+export async function deleteStudent(studentId: number): Promise<void> {
+  console.log("Delete ID: ", studentId);
+}
+
 // Create new student
 export async function createNewStudent({
   last_name,
@@ -22,7 +27,7 @@ export async function createNewStudent({
   birth_date: string | undefined;
   gender: string | undefined;
   has_siblings: boolean;
-  course_id: number | undefined;
+  course_id: number | null;
   siblings_ids: number[];
 }): Promise<void> {
   const { data: newStudent, error } = await supabase
@@ -34,7 +39,7 @@ export async function createNewStudent({
         middle_names,
         birth_date,
         gender,
-        has_siblings: siblings_ids.length ? true : false, // To prevent "true" when there are no siblings selected
+        has_siblings,
         course_id,
         siblings_ids,
       },
@@ -52,19 +57,8 @@ export async function createNewStudent({
 }
 
 // Update student
-export async function updateStudent({
-  selectedStudentId,
-  initialValues,
-  last_name,
-  first_name,
-  middle_names,
-  birth_date,
-  gender,
-  has_siblings,
-  course_id,
-  siblings_ids,
-}: {
-  selectedStudentId: number;
+export async function updateStudent(
+  selectedStudentId: number,
   initialValues: {
     last_name: string | undefined;
     first_name: string | undefined;
@@ -73,19 +67,30 @@ export async function updateStudent({
     gender: string | undefined;
     grade: string | undefined;
     section: string | undefined;
-    course_id: number | undefined;
+    course_id: number | null;
     has_siblings: boolean;
     siblings_ids: number[];
-  };
-  last_name: string | undefined;
-  first_name: string | undefined;
-  middle_names: string | undefined;
-  birth_date: string | undefined;
-  gender: string | undefined;
-  has_siblings: boolean;
-  course_id: number | undefined;
-  siblings_ids: number[];
-}): Promise<void> {
+  },
+  {
+    last_name,
+    first_name,
+    middle_names,
+    birth_date,
+    gender,
+    has_siblings,
+    course_id,
+    siblings_ids,
+  }: {
+    last_name: string | undefined;
+    first_name: string | undefined;
+    middle_names: string | undefined;
+    birth_date: string | undefined;
+    gender: string | undefined;
+    has_siblings: boolean;
+    course_id: number | null;
+    siblings_ids: number[];
+  }
+): Promise<void> {
   const { data: updatedStudent, error } = await supabase
     .from("students")
     .update({
@@ -94,7 +99,7 @@ export async function updateStudent({
       middle_names: middle_names,
       birth_date: birth_date,
       gender: gender,
-      has_siblings: siblings_ids.length ? true : false, // To prevent "true" when there are no siblings selected
+      has_siblings,
       course_id: course_id,
       siblings_ids: siblings_ids,
     })

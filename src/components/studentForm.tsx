@@ -7,18 +7,11 @@ import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 // Dates management library
 import dayjs from "dayjs";
 
-// Supabase client
-import supabase from "../../config/supabaseClient";
-
 // Types
 import type { CourseType, StudentType } from "../../config/databaseTypes";
 
 // Actions
-import {
-  createNewStudent,
-  addSiblings,
-  removeSiblings,
-} from "../../lib/actions";
+import { createNewStudent, updateStudent } from "../../lib/actions";
 
 // Components
 import { Button, Checkbox, DatePicker, Form, Input, Select } from "antd";
@@ -63,7 +56,7 @@ export default function StudentForm(): JSX.Element {
     gender: selectedStudent?.gender || undefined,
     grade: selectedStudentCourse?.grade || undefined,
     section: selectedStudentCourse?.section || undefined,
-    course_id: selectedStudent?.course_id || undefined,
+    course_id: selectedStudent?.course_id || null,
     has_siblings: selectedStudent?.has_siblings || false,
     siblings_ids: selectedStudent?.siblings_ids || [],
   };
@@ -79,6 +72,18 @@ export default function StudentForm(): JSX.Element {
   const [course_id, setCourseId] = useState(initialValues.course_id);
   const [has_siblings, setHasSiblings] = useState(initialValues.has_siblings);
   const [siblings_ids, setSiblingsIds] = useState(initialValues.siblings_ids);
+
+  // States object
+  const studentData = {
+    last_name: last_name,
+    first_name: first_name,
+    middle_names: middle_names,
+    birth_date: birth_date,
+    gender: gender,
+    has_siblings: siblings_ids.length ? true : false, // To prevent "true" when there are no siblings selected
+    course_id: course_id,
+    siblings_ids: siblings_ids,
+  };
 
   ////////// GRADE AND SECTION DROPDOWN SELECTORS MANAGEMENT //////////
 
@@ -102,24 +107,24 @@ export default function StudentForm(): JSX.Element {
       .filter((course) => course.grade === grade)
       .map((course) => course.section);
     setSectionsList(availableSections);
-    setCourseId(undefined);
+    setCourseId(null);
   }, [grade]);
 
   // Course id finder (depends on selected grade and course)
   useEffect(() => {
-    if (section) {
+    if (section != undefined) {
       const selectedCourseId = courses.filter(
         (course) => course.grade === grade && course.section === section
       )[0].course_id;
       setCourseId(selectedCourseId);
     } else {
-      setCourseId(undefined);
+      setCourseId(null);
     }
   }, [section]);
 
   ////////// HANDLERS //////////
 
-  // Resetter
+  // Form resetter
   function handleReset(): void {
     form.resetFields();
     setLastName(initialValues.last_name);
@@ -134,63 +139,16 @@ export default function StudentForm(): JSX.Element {
     setSiblingsIds(initialValues.siblings_ids);
   }
 
-  // Creator
-  async function handleCreate() {
-    await createNewStudent({
-      last_name,
-      first_name,
-      middle_names,
-      birth_date,
-      gender,
-      has_siblings: siblings_ids.length ? true : false, // To prevent "true" when there are no siblings selected
-      course_id,
-      siblings_ids,
-    });
-    navigate("/");
+  // Student creator
+  async function handleCreate(): Promise<void> {
+    await createNewStudent(studentData);
+    navigate(-1);
   }
 
-  // Updater
-  async function handleUpdate() {
-    // Update student data
-    const { data: updatedStudent, error } = await supabase
-      .from("students")
-      .update({
-        last_name: last_name,
-        first_name: first_name,
-        middle_names: middle_names,
-        birth_date: birth_date,
-        gender: gender,
-        has_siblings: siblings_ids.length ? true : false, // To prevent "true" when there are no siblings selected
-        course_id: course_id,
-        siblings_ids: siblings_ids,
-      })
-      .eq("student_id", selectedStudentId);
-    if (error) {
-      console.log(error);
-      throw new Error("Error " + error.code + ": " + error.message + ".");
-    }
-    // If siblings_ids was updated...
-    if (
-      JSON.stringify(initialValues.siblings_ids) !==
-      JSON.stringify(siblings_ids)
-    ) {
-      // Make a list of newSiblingsIds...
-      const newSiblingsIds = siblings_ids.filter(
-        (sibling_id) => !initialValues.siblings_ids.includes(sibling_id)
-      );
-      console.log(newSiblingsIds);
-      // And update siblings_ids list of every new sibling...
-      await addSiblings(newSiblingsIds, selectedStudentId);
-      // Then make a list of notSiblingsAnymoreIds...
-      const notSiblingsAnymoreIds = initialValues.siblings_ids.filter(
-        (sibling_id) => !siblings_ids.includes(sibling_id)
-      );
-      console.log(notSiblingsAnymoreIds);
-      // And update siblings_ids list of every not-sibling-anymore
-      await removeSiblings(notSiblingsAnymoreIds, selectedStudentId);
-    }
-    console.log(updatedStudent);
-    navigate("/");
+  // Student updater
+  async function handleUpdate(): Promise<void> {
+    await updateStudent(selectedStudentId, initialValues, studentData);
+    navigate(-1);
   }
 
   return (
@@ -290,9 +248,9 @@ export default function StudentForm(): JSX.Element {
             <Select
               placeholder="Select grade"
               onChange={(value: string) => {
+                form.setFieldValue("section", undefined);
                 setGrade(value);
                 setSection(undefined);
-                form.setFieldValue("section", undefined);
               }}
               allowClear
             >

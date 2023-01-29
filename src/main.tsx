@@ -71,19 +71,17 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       {
-        path: "students/:studentId/edit",
-        loader: allCoursesAndAllStudentsLoader as LoaderFunction,
-        element: <EditStudent />,
-        errorElement: <ErrorPage />,
-      },
-
-      {
         path: "students/:studentId",
         loader: studentLoaderById as LoaderFunction,
         element: <Student />,
         errorElement: <ErrorPage />,
       },
-
+      {
+        path: "students/:studentId/edit",
+        loader: allCoursesAndAllStudentsLoader as LoaderFunction,
+        element: <EditStudent />,
+        errorElement: <ErrorPage />,
+      },
       {
         path: "students/:studentId/delete",
         action: deleteStudent as ActionFunction,

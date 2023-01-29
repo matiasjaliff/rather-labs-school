@@ -35,7 +35,7 @@ export default function Student(): JSX.Element {
               <Button
                 type="primary"
                 size="large"
-                href={`/students/${student.student_id}/edit`}
+                href={`/students/edit/${student.student_id}`}
               >
                 Edit student
               </Button>

@@ -77,7 +77,7 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       {
-        path: "students/:studentId/edit",
+        path: "students/edit/:studentId",
         loader: allCoursesAndAllStudentsLoader as LoaderFunction,
         element: <EditStudent />,
         errorElement: <ErrorPage />,

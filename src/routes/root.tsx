@@ -4,7 +4,7 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
 // Providers
-import { useSession, useSessionUpdate } from "../providers/sessionProvider";
+import { useSession } from "../providers/sessionProvider";
 
 // Components
 import { Button } from "antd";
@@ -12,8 +12,10 @@ import { Button } from "antd";
 ////////// COMPONENT //////////
 
 export default function Root(): JSX.Element {
-  const { session } = useSession() as { session: string | null };
-  const setSession = useSessionUpdate() as (session: string | null) => void;
+  const { session, setSession } = useSession() as {
+    session: string | null;
+    setSession: (session: string | null) => void;
+  };
   const navigate = useNavigate();
 
   function toggleSession(): void {

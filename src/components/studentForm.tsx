@@ -142,13 +142,13 @@ export default function StudentForm(): JSX.Element {
   // Student creator
   async function handleCreate(): Promise<void> {
     await createNewStudent(studentData);
-    navigate(-1);
+    navigate("/students");
   }
 
   // Student updater
   async function handleUpdate(): Promise<void> {
     await updateStudent(selectedStudentId, initialValues, studentData);
-    navigate(-1);
+    navigate(`/students/${selectedStudentId}`);
   }
 
   return (

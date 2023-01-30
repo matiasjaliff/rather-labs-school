@@ -2,7 +2,7 @@
 
 My solution for a tech challenge for a **Full Stack Developer** position in **Rather Labs**. It's deployed in [**Vercel**](https://vercel.com/) and you can check it out here:
 
-https://rather-school.vercel.app/
+https://rather-labs-school.vercel.app/
 
 ---
 
@@ -55,16 +55,3 @@ Outside `src` there are two important folders:
 - Create, edit and delete courses.
 - Authenticated sessions.
 - Clean CSS.
-
----
-
-## **Local dev build**
-
-In case you wanted to try this project locally, please clone this repository and create a `.env` file in the root directory with these two keys:
-
-`VITE_SUPABASE_URL=https://kkotckxbfxzxbwpfwvis.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtrb3Rja3hiZnh6eGJ3cGZ3dmlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzI2NjE2NTQsImV4cCI6MTk4ODIzNzY1NH0.rJ7-CfCk6P4U9hPfwcDqzd35cUSnM3HWE-9j9ebLN9A`
-
-Install dependecies with `npm install`.
-
-Run development build with `npm run dev` and open localhost.

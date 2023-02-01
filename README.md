@@ -53,5 +53,7 @@ Outside `src` there are two important folders:
 ## **To Dos**
 
 - Create, edit and delete courses.
-- Authenticated sessions.
+- Authenticate sessions.
+- Add avatars.
+- Remove students from course.
 - Clean CSS.
